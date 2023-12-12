@@ -16,7 +16,7 @@ import ApplyLeave from './src/views/leaves/applyLeave';
 import MyShifts from './src/views/Shift/myShift'
 import ShiftApplications from './src/views/Shift/shiftApplication';
 import MyClaims from './src/views/Claims/myClaims';
-
+import { RecoilRoot } from 'recoil';
 const loadFonts = async () => {
   await Font.loadAsync({
     'Poppins-Bold': require("./assets/fonts/Poppins-Bold.ttf"),
@@ -47,35 +47,35 @@ const App = () => {
     return null;
   }
   return (
+    <RecoilRoot>
+      <NavigationContainer ref={navigationRef}>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}
+          initialRouteName="MyAttendance"
+        >
+          {/* Attendance */}
+          <Stack.Screen name="MyAttendance" component={MyAttendance} />
+          <Stack.Screen name="ManageAttendance" component={ManageAttendance} />
+          <Stack.Screen name="TeamAttendance" component={TeamAttendance} />
+          <Stack.Screen name="AttendanceRequest" component={AttendanceRequest} />
+          <Stack.Screen name="AttendanceDetail" component={AttendanceDetail} />
+          <Stack.Screen name="AttendanceRequestDetail" component={AttendanceRequestDetail} />
 
-    <NavigationContainer ref={navigationRef}>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-        initialRouteName="MyAttendance"
-      >
-        {/* Attendance */}
-        <Stack.Screen name="MyAttendance" component={MyAttendance} />
-        <Stack.Screen name="ManageAttendance" component={ManageAttendance} />
-        <Stack.Screen name="TeamAttendance" component={TeamAttendance} />
-        <Stack.Screen name="AttendanceRequest" component={AttendanceRequest} />
-        <Stack.Screen name="AttendanceDetail" component={AttendanceDetail} />
-        <Stack.Screen name="AttendanceRequestDetail" component={AttendanceRequestDetail} />
+          <Stack.Screen name="MyLeaves" component={MyLeaves} />
+          <Stack.Screen name="LeaveRequest" component={LeaveRequest} />
+          <Stack.Screen name="ApplyLeave" component={ApplyLeave} />
 
-        <Stack.Screen name="MyLeaves" component={MyLeaves} />
-        <Stack.Screen name="LeaveRequest" component={LeaveRequest} />
-        <Stack.Screen name="ApplyLeave" component={ApplyLeave} />
+          <Stack.Screen name="MyShifts" component={MyShifts} />
+          <Stack.Screen name="ShiftApplications" component={ShiftApplications} />
 
-        <Stack.Screen name="MyShifts" component={MyShifts} />
-        <Stack.Screen name="ShiftApplications" component={ShiftApplications} />
-
-        <Stack.Screen name="MyClaims" component={MyClaims} />
+          <Stack.Screen name="MyClaims" component={MyClaims} />
 
 
-      </Stack.Navigator>
-    </NavigationContainer>
-
+        </Stack.Navigator>
+      </NavigationContainer>
+    </RecoilRoot>
   );
 };
 

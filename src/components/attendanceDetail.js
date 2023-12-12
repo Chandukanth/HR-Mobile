@@ -9,6 +9,7 @@ import compoff from "../../assets/days/compoff.png"
 import weekoff from "../../assets/days/weekoff.png"
 import notassigned from "../../assets/days/notassigned.png"
 import Layout from './layout';
+import Avatar from '../../assets/avatar/avatar2.png'
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -41,19 +42,29 @@ const AttendanceDetail = (props) => {
                 <Text style={{ textAlign: 'center', fontFamily: 'Poppins-SemiBold', paddingTop: 20, paddingBottom: 20 }}>{`Attendence Overview - ${params?.day ? params?.day : ''} ${params?.month} 23`}</Text>
                 {params?.present ? (
                     <>
-                        {attendance.map((item, index) => (
-                            <View key={index} style={{ backgroundColor: '#f7f7f7' }}>
-                                <View key={index} style={[styles.menuContainer, { height: 80 }]}>
-                                    <Text style={{ fontFamily: 'Poppins-Light', marginLeft: 30 }}>{item.name}</Text>
-                                    {item.number && <View style={{ width: 100, height: 40, borderRadius: 8, backgroundColor: '#f7f7f7', justifyContent: 'center', alignItems: 'center', marginRight: 20 }}>
-                                        {<Text style={{ fontFamily: 'Poppins-Medium' }}>{item.number}</Text>}
-
-                                    </View>}
-                                    {item.image && <Image style={{ width: 25, height: 25, marginRight: 30 }} source={item.image} />}
-
-                                </View>
+                        <View style={{ alignItems: 'center', flex: 0.4 }}>
+                            <View style={{ width: 200, backgroundColor: '#fff', borderRadius: screenWidth, height: 200, justifyContent: 'flex-end', alignItems: 'center' }}>
+                                <Image style={{ objectFit: 'cover', width:150, height : 150, marginBottom : 10 }} source={Avatar} />
                             </View>
-                        ))}
+                            <Text style={{fontFamily : 'Poppins-Bold',  marginTop : 20, }}>Chandu K Yadav</Text>
+
+                        </View>
+                        <View style={{ flex: 0.5 }}>
+                            {attendance.map((item, index) => (
+                                <View key={index} style={{ backgroundColor: '#f7f7f7' }}>
+                                    <View key={index} style={[styles.menuContainer, { height: 80 }]}>
+                                        <Text style={{ fontFamily: 'Poppins-Light', marginLeft: 30 }}>{item.name}</Text>
+                                        {item.number && <View style={{ width: 100, height: 40, borderRadius: 8, backgroundColor: '#f7f7f7', justifyContent: 'center', alignItems: 'center', marginRight: 20 }}>
+                                            {<Text style={{ fontFamily: 'Poppins-Medium' }}>{item.number}</Text>}
+
+                                        </View>}
+                                        {item.image && <Image style={{ width: 25, height: 25, marginRight: 30 }} source={item.image} />}
+
+                                    </View>
+                                </View>
+                            ))}
+                        </View>
+
                     </>
                 ) : (
                     <>
@@ -84,7 +95,7 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         backgroundColor: '#fff',
         width: screenWidth - 50,
-        height: screenHeight / 12.8,
+        height: screenHeight / 12.2,
         margin: 4,
         flexDirection: 'row',
         justifyContent: 'space-between',

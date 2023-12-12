@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Text, View, FlatList, ScrollView, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import BottomSheet from "./BottomSheet";
 
 const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 
@@ -24,6 +25,13 @@ const Calender = ({ footer }) => {
     const [selectedYear, setSelectedYear] = useState(2023);
     const [sideBarOpen, setSideBarOpen] = useState(false)
     const [selectedMonth, setSelectedMonth] = useState(null)
+    const [isDrawerVisible, setDrawerVisible] = useState(false);
+    const toggleDrawer = () => {
+        setDrawerVisible(!isDrawerVisible);
+    };
+    const years = [
+        ...Array.from({ length: 2100 - 2012 + 1 }, (_, index) => 2012 + index),
+    ];
     const navigation = useNavigation()
     const handlePrevYear = () => {
         setSelectedYear((prevYear) => prevYear - 1);
@@ -55,20 +63,20 @@ const Calender = ({ footer }) => {
 
     const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     return (
-        <>
+        <View style={{ flex: 1 }}>
 
             <FlatList
                 pagingEnabled
                 showsHorizontalScrollIndicator={true}
                 data={yearMonths}
-                onEndReached={handleNextYear}
-                onEndReachedThreshold={0.1}
+
+                style={{ flex: 0.7 }}
                 keyExtractor={(item) => item.month}
                 renderItem={({ item }) => (
 
                     <View style={{ flex: footer ? 0.8 : 1, justifyContent: 'center', padding: 10, maxHeight: '100%', backgroundColor: '#fff' }}>
                         {/* Month Name */}
-                        <Text onPress={() => detailsSelect(item.month)} style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10, textAlign: 'center', fontFamily: 'Poppins-SemiBold' }}>{item.month} - {selectedYear}</Text>
+                        <Text onPress={() => detailsSelect(item.month)} style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 18, textAlign: 'center', fontFamily: 'Poppins-SemiBold' }}>{item.month} - <Text onPress={toggleDrawer}>{selectedYear}</Text></Text>
 
                         {/* Week Days */}
                         <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: 10 }}>
@@ -93,11 +101,11 @@ const Calender = ({ footer }) => {
                                         margin: 5,
                                         marginBottom: 20
                                     }}
-                                    onPress={() => navigation.navigate("AttendanceDetail", { month: item.month, present : true, day })}
+                                    onPress={() => navigation.navigate("AttendanceDetail", { month: item.month, present: true, day })}
                                 >
 
                                     {day !== null && <Text>{day}</Text>}
-                                    {day !== null && day == 2 ? <Image style={{ width: 20, height: 20, marginTop: 3 }} source={require("../../assets/days/present.png")} /> : day !== null && <Image style={{ width: 20, height: 20, marginTop: 3, opacity : 0.5 }} source={require("../../assets/days/notassigned.png")} />}
+                                    {day !== null && day == 2 ? <Image style={{ width: 20, height: 20, marginTop: 3 }} source={require("../../assets/days/present.png")} /> : day !== null && <Image style={{ width: 20, height: 20, marginTop: 3, opacity: 0.5 }} source={require("../../assets/days/notassigned.png")} />}
                                 </TouchableOpacity>
                             )}
                             numColumns={7} // Number of columns in the calendar
@@ -107,15 +115,40 @@ const Calender = ({ footer }) => {
                 )}
             />
             {footer && (
-                <View style={{ backgroundColor: '#fff' }}>
+                <View style={{ backgroundColor: '#fff', flex: 0.23 }}>
                     {footer}
                 </View>
             )}
 
 
+            {isDrawerVisible && (
+                <BottomSheet isModalVisible={isDrawerVisible} setModalVisible={setDrawerVisible} toggleModal={toggleDrawer} >
+
+                    <View style={{ flex: 1, flexDirection: "row", paddingTop: 20, justifyContent: 'space-evenly' }}>
+
+                        <View style={{ width: '100%', }}>
+                            <Text style={{ textAlign: 'center', fontFamily: 'Poppins-SemiBold', fontSize: 16, }}>Year</Text>
+                            <ScrollView showsVerticalScrollIndicator={false}>
+                            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgrey', marginHorizontal: 65 , paddingTop:10}} />
+
+                                {years.map((item, index) => (
+                                    <TouchableOpacity onPress={() => {
+                                        setSelectedYear(item)
+                                        toggleDrawer()
+                                    }} key={index} style={{ height: 60, borderBottomWidth: 1, alignItems: 'center', justifyContent: 'center', borderBottomColor: 'lightgrey', marginHorizontal: 65 }}>
+                                        <Text style={{ textAlign: 'left', fontFamily: 'Poppins-Medium' }}>{item}</Text>
+                                    </TouchableOpacity>
+                                ))}
+                            </ScrollView>
+                        </View>
+
+                    </View>
 
 
-        </>
+                </BottomSheet>
+            )}
+
+        </View>
     );
 };
 

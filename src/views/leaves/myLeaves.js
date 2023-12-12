@@ -9,8 +9,11 @@ import { useNavigation } from "@react-navigation/native";
 import BlackButton from "../../components/blackButton";
 import Absent from "../../../assets/days/absent.png"
 import present from "../../../assets/days/present.png"
+import { isClosingState } from "../../lib/atom";
+import { useRecoilState } from "recoil";
 
 const MyLeaves = () => {
+    const [isClosing, setIsClosing] = useRecoilState(isClosingState);
     const [isDrawerVisible, setDrawerVisible] = useState(false);
     const navigation = useNavigation()
     const toggleDrawer = () => {
@@ -72,7 +75,7 @@ const MyLeaves = () => {
                 </TouchableOpacity>
                 <View style={{ alignItems: 'center', paddingTop: 20 }}>
 
-                    <View style={styles.card}>
+                    <View style={[styles.card, {elevation : isClosing ? 0 : 5}]}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 20, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
                             <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Applied</Text>
                             <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>14 - Dec - 2021</Text>

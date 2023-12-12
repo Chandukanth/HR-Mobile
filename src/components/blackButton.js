@@ -1,9 +1,12 @@
 import React from "react"
-import { TouchableOpacity, Text } from "react-native"
+import { TouchableOpacity, Text, View } from "react-native"
 
-const BlackButton = ({ onPress, title }) => {
-    <TouchableOpacity onPress={onPress} style={{ width: '100%', height: 40, backgroundColor: 'black', borderRadius: 2, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginLeft: 10, marginBottom: 10 }}>
-        <Text style={{ color: 'white', fontFamily: 'Poppins-Light' }}>{title}</Text>
-    </TouchableOpacity>
-}
+const BlackButton = ({ onPress, title }) => (
+
+    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <TouchableOpacity onPress={onPress} style={{ width: '95%', height: 55, backgroundColor: 'black', borderRadius: 8, justifyContent: 'center', alignItems: 'center', marginTop: 12 }}>
+            <Text style={{ color: 'white', fontFamily: 'Poppins-Medium', fontSize:15 }}>{title}</Text>
+        </TouchableOpacity>
+    </View>
+)
 export default BlackButton
