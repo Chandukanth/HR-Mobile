@@ -13,7 +13,7 @@ const TeamAttendance = () => {
 
 
     const footer = (
-        <View style={{ borderTopWidth: 2,  borderColor: 'lightgrey' }}>
+        <View style={{ borderTopWidth: 2, borderColor: 'lightgrey' }}>
             <TouchableOpacity onPress={openModal} style={{ width: '95%', height: 40, backgroundColor: 'white', borderRadius: 2, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, borderColor: 'lightgrey' }}>
                 {/* <Text style={{ color: 'white', fontFamily: 'Poppins-Light' }}>Check out</Text> */}
             </TouchableOpacity>
@@ -40,20 +40,23 @@ const TeamAttendance = () => {
     return (
         <Layout title={'Team Attendance'}>
             <Calender footer={footer} />
-            <BottomSheet isModalVisible={visible} setModalVisible={setVisible} toggleModal={openModal} >
-                <View style={{ paddingTop: 30, margin: 20 }}>
-                    <Text style={{ fontSize: 16, fontFamily: 'Poppins-SemiBold', color: '#808080' }}>Select Team Member</Text>
-                    {Name.map((item) => (
-                        <View key={item} style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 20, height: 60 , borderBottomWidth : 0.2, borderBottomColor : '#808080'}}>
-                            <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: 'lightgrey' }} />
-                            <Text style={{ marginLeft: 20, fontSize: 14, fontFamily: 'Poppins-Regular', color: '#808080' }}>{item}</Text>
+            {visible && (
+                <BottomSheet isModalVisible={visible} setModalVisible={setVisible} toggleModal={openModal} >
+                    <View style={{ paddingTop: 30, margin: 20 }}>
+                        <Text style={{ fontSize: 16, fontFamily: 'Poppins-SemiBold', color: '#808080' }}>Select Team Member</Text>
+                        {Name.map((item) => (
+                            <View key={item} style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 20, height: 60, borderBottomWidth: 0.2, borderBottomColor: '#808080' }}>
+                                <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: 'lightgrey' }} />
+                                <Text style={{ marginLeft: 20, fontSize: 14, fontFamily: 'Poppins-Regular', color: '#808080' }}>{item}</Text>
 
-                        </View>
-                    ))}
+                            </View>
+                        ))}
 
-                </View>
+                    </View>
 
-            </BottomSheet>
+                </BottomSheet>
+            )}
+
 
 
         </Layout>
