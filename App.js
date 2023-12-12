@@ -63,16 +63,13 @@ const App = () => {
         <Stack.Screen name="AttendanceDetail" component={AttendanceDetail} />
         <Stack.Screen name="AttendanceRequestDetail" component={AttendanceRequestDetail} />
 
-        {/* Leaves */}
         <Stack.Screen name="MyLeaves" component={MyLeaves} />
         <Stack.Screen name="LeaveRequest" component={LeaveRequest} />
         <Stack.Screen name="ApplyLeave" component={ApplyLeave} />
 
-        {/* Shift */}
         <Stack.Screen name="MyShifts" component={MyShifts} />
         <Stack.Screen name="ShiftApplications" component={ShiftApplications} />
 
-        {/* Claims */}
         <Stack.Screen name="MyClaims" component={MyClaims} />
 
 

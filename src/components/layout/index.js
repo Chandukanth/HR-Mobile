@@ -21,7 +21,7 @@ const Layout = ({ children, title, noChildren, tabView, backButton }) => {
             isOpen={isMenuOpen}
             onChange={(isOpen) => setMenuOpen(isOpen)}
         >
-            <View style={{ flex: 1, backgroundColor: '#fff', paddingTop: '10%', opacity: isMenuOpen ? 0.2 : 1 }}>
+            <View style={{ flex: 1, backgroundColor: '#fff', opacity: isMenuOpen ? 0.2 : 1, borderRadius : isMenuOpen ? 12 : 0 }}>
 
                 <View style={{ padding: 16, alignItems: 'center', flexDirection: 'row', borderBottomColor: 'lightgrey', borderBottomWidth: 1 }}>
                     {backButton ? (
