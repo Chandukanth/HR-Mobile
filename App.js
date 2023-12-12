@@ -10,6 +10,12 @@ import TeamAttendance from './src/views/Attendance/teamAttendance';
 import AttendanceRequest from './src/views/Attendance/attendanceRequest';
 import AttendanceDetail from './src/components/attendanceDetail';
 import AttendanceRequestDetail from './src/views/Attendance/attendanceRequestDetail';
+import MyLeaves from './src/views/leaves/myLeaves';
+import LeaveRequest from './src/views/leaves/leaveRequests';
+import ApplyLeave from './src/views/leaves/applyLeave';
+import MyShifts from './src/views/Shift/myShift'
+import ShiftApplications from './src/views/Shift/shiftApplication';
+import MyClaims from './src/views/Claims/myClaims';
 
 const loadFonts = async () => {
   await Font.loadAsync({
@@ -56,6 +62,19 @@ const App = () => {
         <Stack.Screen name="AttendanceRequest" component={AttendanceRequest} />
         <Stack.Screen name="AttendanceDetail" component={AttendanceDetail} />
         <Stack.Screen name="AttendanceRequestDetail" component={AttendanceRequestDetail} />
+
+        {/* Leaves */}
+        <Stack.Screen name="MyLeaves" component={MyLeaves} />
+        <Stack.Screen name="LeaveRequest" component={LeaveRequest} />
+        <Stack.Screen name="ApplyLeave" component={ApplyLeave} />
+
+        {/* Shift */}
+        <Stack.Screen name="MyShifts" component={MyShifts} />
+        <Stack.Screen name="ShiftApplications" component={ShiftApplications} />
+
+        {/* Claims */}
+        <Stack.Screen name="MyClaims" component={MyClaims} />
+
 
       </Stack.Navigator>
     </NavigationContainer>

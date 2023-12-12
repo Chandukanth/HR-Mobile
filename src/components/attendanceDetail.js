@@ -10,7 +10,7 @@ import weekoff from "../../assets/days/weekoff.png"
 import notassigned from "../../assets/days/notassigned.png"
 import Layout from './layout';
 
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const AttendanceDetail = (props) => {
     let params = props.route.params
@@ -45,8 +45,8 @@ const AttendanceDetail = (props) => {
                             <View key={index} style={{ backgroundColor: '#f7f7f7' }}>
                                 <View key={index} style={[styles.menuContainer, { height: 80 }]}>
                                     <Text style={{ fontFamily: 'Poppins-Light', marginLeft: 30 }}>{item.name}</Text>
-                                    {item.number && <View style={{width : 100, height : 40, borderRadius : 8, backgroundColor : '#f7f7f7', justifyContent : 'center', alignItems:'center', marginRight: 20}}>
-                                    {<Text style={{  fontFamily: 'Poppins-Medium' }}>{item.number}</Text>}
+                                    {item.number && <View style={{ width: 100, height: 40, borderRadius: 8, backgroundColor: '#f7f7f7', justifyContent: 'center', alignItems: 'center', marginRight: 20 }}>
+                                        {<Text style={{ fontFamily: 'Poppins-Medium' }}>{item.number}</Text>}
 
                                     </View>}
                                     {item.image && <Image style={{ width: 25, height: 25, marginRight: 30 }} source={item.image} />}
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         backgroundColor: '#fff',
         width: screenWidth - 50,
-        height: 60,
+        height: screenHeight / 12.8,
         margin: 4,
         flexDirection: 'row',
         justifyContent: 'space-between',

@@ -22,6 +22,15 @@ const AttendanceRequestDetail = (props) => {
         ...Array.from({ length: 2100 - 2012 + 1 }, (_, index) => 2012 + index),
     ];
 
+    const data = [
+        { date: '14 - dec - 2021', reason : 'Forgot_to_punch', button : 'Approve' },
+        { date: '14 - dec - 2021', reason : 'Forgot_to_punch', button : 'Rejected' },
+        { date: '14 - dec - 2021', reason : 'Forgot_to_punch', button : 'Approve', button2 : 'Reject' },
+        { date: '14 - dec - 2021', reason : 'Forgot_to_punch', button : 'Approve', button2 : 'Reject' },
+        { date: '14 - dec - 2021', reason : 'Forgot_to_punch', button : 'Approve', button2 : 'Reject' },
+
+    ]
+
     const monthNames = [
         'January', 'February', 'March', 'April',
         'May', 'June', 'July', 'August',
@@ -40,6 +49,7 @@ const AttendanceRequestDetail = (props) => {
                 </TouchableOpacity>
 
                 <View style={{ alignItems: 'center', paddingTop: 20 }}>
+                    
                     <View style={styles.card}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 20, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
                             <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>For Date</Text>
@@ -60,12 +70,12 @@ const AttendanceRequestDetail = (props) => {
 
                         </View>
                         <View style={{ borderWidth: 1, borderColor: 'lightgrey', height: 50, borderRadius: 6, width: '90%', marginLeft: 20, marginTop: 20, justifyContent: 'center', alignItems: 'flex-start' }}>
-                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, marginLeft : 10 }}>Forgot_to_punch</Text>
+                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, marginLeft: 10 }}>Forgot_to_punch</Text>
                         </View>
                         <TouchableOpacity onPress={toggleDrawer} style={{ width: '40%', height: 40, backgroundColor: 'black', borderRadius: 2, justifyContent: 'center', alignItems: 'center', marginTop: 20, marginLeft: 20, marginBottom: 10 }}>
                             <Text style={{ color: 'white', fontFamily: 'Poppins-Light' }}>Approve</Text>
                         </TouchableOpacity>
-                        
+
                     </View>
                 </View>
 
@@ -112,8 +122,8 @@ export default AttendanceRequestDetail
 const styles = StyleSheet.create({
     card: {
         backgroundColor: '#fff',
-        height: '70%',
-        width: '80%',
+        height: '72%',
+        width: '85%',
         borderRadius: 12,
         elevation: 5,
 

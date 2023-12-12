@@ -23,7 +23,7 @@ const MyAttendance = () => {
                     </Text>
                 </View>
             </View>
-            <TouchableOpacity style={{ width: '95%', height: 40, backgroundColor: 'black', borderRadius: 2, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginLeft: 10 }}>
+            <TouchableOpacity style={{ width: '100%', height: 40, backgroundColor: 'black', borderRadius: 2, justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
                 <Text style={{ color: 'white', fontFamily: 'Poppins-Light' }}>Check out</Text>
             </TouchableOpacity>
 

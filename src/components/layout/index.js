@@ -14,17 +14,18 @@ const Layout = ({ children, title, noChildren, tabView, backButton }) => {
         setMenuOpen(!isMenuOpen);
     };
 
+   
     return (
         <SideMenu
             menu={<SideMenuContent navigation={navigation} setMenuOpen={setMenuOpen} />}
             isOpen={isMenuOpen}
             onChange={(isOpen) => setMenuOpen(isOpen)}
         >
-            <View style={{ flex: 1, backgroundColor: '#fff'}}>
+            <View style={{ flex: 1, backgroundColor: '#fff', paddingTop: '10%', opacity: isMenuOpen ? 0.2 : 1 }}>
 
-                <View style={{ padding: 16, alignItems: 'center', flexDirection: 'row', borderBottomColor : 'lightgrey', borderBottomWidth : 1 }}>
+                <View style={{ padding: 16, alignItems: 'center', flexDirection: 'row', borderBottomColor: 'lightgrey', borderBottomWidth: 1 }}>
                     {backButton ? (
-                        <TouchableOpacity onPress={()=> navigation.goBack()}>
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
                             <AntDesign name="back" size={24} color="black" />
                         </TouchableOpacity>
                     ) : (
@@ -37,7 +38,7 @@ const Layout = ({ children, title, noChildren, tabView, backButton }) => {
                 </View>
 
                 {!noChildren && (
-                    <View style={{ flex: 1,  }}>
+                    <View style={{ flex: 1, }}>
                         {children}
                     </View>
                 )}

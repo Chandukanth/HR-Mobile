@@ -7,7 +7,7 @@ import Collapsible from 'react-native-collapsible';
 import { ScrollView } from 'react-native';
 
 const SubMenu = ({ items, navigation, setMenuOpen }) => {
-    const [isCollapsed, setCollapsed] = useState(items.title == 'Attendance' ? false : true);
+    const [isCollapsed, setCollapsed] = useState(false);
     const [activeMenu, setActiveMenu] = useState("MyAttendance")
 
     const toggleCollapse = () => {
@@ -62,8 +62,8 @@ const SideMenuContent = ({ navigation, setMenuOpen }) => {
         },
         {
             title: 'Leaves', subItems: [
-                { name: 'My Leaves', },
-                { name: 'Leave Requests', },
+                { name: 'My Leaves', screen: 'MyLeaves' },
+                { name: 'Leave Requests', screen: 'LeaveRequest' },
             ]
         },
         {
@@ -80,13 +80,13 @@ const SideMenuContent = ({ navigation, setMenuOpen }) => {
         },
         {
             title: 'Shifts', subItems: [
-                { name: 'My Shift', },
-                { name: 'Shift Applications', },
+                { name: 'My Shift', screen: 'MyShifts' },
+                { name: 'Shift Applications', screen: 'ShiftApplications' },
             ]
         },
         {
             title: 'Claims', subItems: [
-                { name: 'My Claims', },
+                { name: 'My Claims', screen: 'MyClaims' },
                 { name: 'Applications', },
             ]
         },

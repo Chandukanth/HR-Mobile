@@ -97,7 +97,7 @@ const Calender = ({ footer }) => {
                                 >
 
                                     {day !== null && <Text>{day}</Text>}
-                                    {day !== null && day == 2 ? <Image style={{ width: 20, height: 20, marginTop: 3 }} source={require("../../assets/days/present.png")} /> : day !== null && <Image style={{ width: 20, height: 20, marginTop: 3 }} source={require("../../assets/days/notassigned.png")} />}
+                                    {day !== null && day == 2 ? <Image style={{ width: 20, height: 20, marginTop: 3 }} source={require("../../assets/days/present.png")} /> : day !== null && <Image style={{ width: 20, height: 20, marginTop: 3, opacity : 0.5 }} source={require("../../assets/days/notassigned.png")} />}
                                 </TouchableOpacity>
                             )}
                             numColumns={7} // Number of columns in the calendar
