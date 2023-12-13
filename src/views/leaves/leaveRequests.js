@@ -8,6 +8,7 @@ import RejectButton from "../../components/buttons/RejectButton";
 import Layout from "../../components/layout";
 import DateFilter from "../../components/DateFilter";
 import ChattingScreen from "../../components/Ui/chattingScreen";
+import { screenHeight } from "../../lib/heightwidth";
 
 const LeaveRequest = () => {
     const [isDrawerVisible, setDrawerVisible] = useState(false);
@@ -178,7 +179,7 @@ export default LeaveRequest
 const styles = StyleSheet.create({
     card: {
         backgroundColor: '#fff',
-        height: '80%',
+        height: screenHeight * 0.59,
         width: '84%',
         borderRadius: 12,
         elevation: 5,

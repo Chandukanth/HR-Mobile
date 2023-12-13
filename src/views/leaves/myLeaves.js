@@ -1,6 +1,6 @@
 import { Foundation, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { BackHandler, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { BackHandler, Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useRecoilState } from "recoil";
 import Avatar from "../../../assets/avatar/avatar2.png";
 import Chat from "../../../assets/new.png";
@@ -12,7 +12,8 @@ import ApprovedButton from "../../components/buttons/ApprovedButton";
 import ChatButton from "../../components/buttons/ChatButton";
 import StatusChat from "../../components/Ui/statusChat";
 import ChattingScreen from "../../components/Ui/chattingScreen";
-
+import { useNavigation } from "@react-navigation/core";
+import { screenHeight } from "../../lib/heightwidth";
 
 const MyLeaves = () => {
     const [isClosing, setIsClosing] = useRecoilState(isClosingState);
@@ -21,6 +22,7 @@ const MyLeaves = () => {
     const [typing, setTyping] = useState(false)
     const [isCollapsed, setCollapsed] = useState(false)
     const [expand, setExpand] = useState(false)
+    const navigation = useNavigation()
     const toggleDrawer = () => {
         setDrawerVisible(!isDrawerVisible);
     };
@@ -148,15 +150,16 @@ const MyLeaves = () => {
                                 </View>
                             </View>
                         </View>
+                        {isDrawerVisible && (
+                            <DateFilter isDrawerVisible={isDrawerVisible} setDrawerVisible={setDrawerVisible} toggleDrawer={toggleDrawer} />
+                        )}
                     </View>
-                    <View style={{ flex: 0.13, borderTopColor: 'lightgrey', justifyContent: 'center' }}>
-                        <BlackButton title={'Apply For Leave'} />
+                    <View style={{ flex: 0.13, backgroundColor: '#f7f7f7' }}>
+                        <BlackButton onPress={() => navigation.navigate('ApplyLeave')} title={'Apply For Leave'} />
                     </View>
                 </>
             )}
-            {isDrawerVisible && (
-                <DateFilter isDrawerVisible={isDrawerVisible} setDrawerVisible={setDrawerVisible} toggleDrawer={toggleDrawer} />
-            )}
+
         </Layout>
     )
 
@@ -165,7 +168,7 @@ export default MyLeaves
 const styles = StyleSheet.create({
     card: {
         backgroundColor: '#fff',
-        height: '81%',
+        height: screenHeight * 0.527,
         width: '85%',
         borderRadius: 12,
         elevation: 5,

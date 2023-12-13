@@ -10,13 +10,16 @@ import Leave from "../../../assets/sidebarIcons/leaveIcon.png"
 import salary from "../../../assets/sidebarIcons/salaryIcon.png"
 import team from "../../../assets/sidebarIcons/teamIcon.png"
 import claims from "../../../assets/sidebarIcons/claimsIcon.png"
+import { useRoute } from '@react-navigation/core';
 
 
 
 const SubMenu = ({ items, navigation, setMenuOpen }) => {
     const [isCollapsed, setCollapsed] = useState(false);
     const [activeMenu, setActiveMenu] = useState("MyAttendance")
-
+    const route = useRoute();
+    const routeNameArray = route.name.split('/');
+    const menuItemValue = routeNameArray[0];
     const toggleCollapse = () => {
         setCollapsed(!isCollapsed);
     };
@@ -41,10 +44,10 @@ const SubMenu = ({ items, navigation, setMenuOpen }) => {
             </TouchableOpacity>
 
             <Collapsible easing={'easeInOutCubic'} collapsed={isCollapsed}>
-                <View style={{ paddingLeft: 15, marginTop: 10 }}>
+                <View style={{  marginTop: 10 }}>
                     {items.subItems.map((subItem, index) => (
-                        <TouchableOpacity onPress={() => handleClick(subItem?.screen)} key={index} >
-                            <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10, }}>
+                        <TouchableOpacity onPress={() => handleClick(subItem?.screen)} key={index} style={{backgroundColor : menuItemValue == subItem.screen ? '#f7f7f7' : '#fff', marginRight:10}} >
+                            <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10, paddingLeft: 15}}>
                                 <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: 'lightgrey' }} />
                                 <Text style={{ fontSize: 12, fontWeight: '300', paddingLeft: 15, fontFamily: 'Poppins-Light' }}>{subItem.name}</Text>
                             </View>
