@@ -21,7 +21,7 @@ const getMonthName = (month) => {
     return monthNames[month];
 };
 
-const Calender = ({ footer }) => {
+const Calender = ({ footer, shift }) => {
     const [selectedYear, setSelectedYear] = useState(2023);
     const [sideBarOpen, setSideBarOpen] = useState(false)
     const [selectedMonth, setSelectedMonth] = useState(null)
@@ -105,7 +105,10 @@ const Calender = ({ footer }) => {
                                 >
 
                                     {day !== null && <Text>{day}</Text>}
-                                    {day !== null && day == 2 ? <Image style={{ width: 20, height: 20, marginTop: 3 }} source={require("../../assets/days/present.png")} /> : day !== null && <Image style={{ width: 20, height: 20, marginTop: 3, opacity: 0.5 }} source={require("../../assets/days/notassigned.png")} />}
+                                    {!shift ?
+                                        <>
+                                            {day !== null && day == 2 ? <Image style={{ width: 20, height: 20, marginTop: 3 }} source={require("../../assets/days/present.png")} /> : day !== null && <Image style={{ width: 20, height: 20, marginTop: 3, opacity: 0.5 }} source={require("../../assets/days/notassigned.png")} />}
+                                        </> : <Text style={{fontFamily : 'Poppins-Medium', color : '#03543e'}}>MS</Text>}
                                 </TouchableOpacity>
                             )}
                             numColumns={7} // Number of columns in the calendar
@@ -129,7 +132,7 @@ const Calender = ({ footer }) => {
                         <View style={{ width: '100%', }}>
                             <Text style={{ textAlign: 'center', fontFamily: 'Poppins-SemiBold', fontSize: 16, }}>Year</Text>
                             <ScrollView showsVerticalScrollIndicator={false}>
-                            <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgrey', marginHorizontal: 65 , paddingTop:10}} />
+                                <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgrey', marginHorizontal: 65, paddingTop: 10 }} />
 
                                 {years.map((item, index) => (
                                     <TouchableOpacity onPress={() => {

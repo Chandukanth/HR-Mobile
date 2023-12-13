@@ -16,6 +16,7 @@ import ApplyLeave from './src/views/leaves/applyLeave';
 import MyShifts from './src/views/Shift/myShift'
 import ShiftApplications from './src/views/Shift/shiftApplication';
 import MyClaims from './src/views/Claims/myClaims';
+import ChangeShift from './src/views/Shift/changeShift';
 import { RecoilRoot } from 'recoil';
 const loadFonts = async () => {
   await Font.loadAsync({
@@ -69,6 +70,8 @@ const App = () => {
 
           <Stack.Screen name="MyShifts" component={MyShifts} />
           <Stack.Screen name="ShiftApplications" component={ShiftApplications} />
+          <Stack.Screen name="ChangeShift" component={ChangeShift} />
+
 
           <Stack.Screen name="MyClaims" component={MyClaims} />
 

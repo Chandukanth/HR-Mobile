@@ -42,6 +42,7 @@ const Layout = ({ children, title, noChildren, tabView, backButton }) => {
             onChange={(isOpen) => setMenuOpen(isOpen)}
             onSliding={closing}
             openMenuOffset={300}
+            edgeHitWidth={200}
         >
             <Animated.View
                 style={{

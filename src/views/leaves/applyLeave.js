@@ -39,13 +39,13 @@ const ApplyLeave = () => {
                 <View style={styles.container}>
                     <TouchableOpacity onPress={() => setOpen(true)} style={styles.leftElement}>
                         <Image style={{ width: 20, height: 20 }} source={Calendar} />
-                        <View  style={styles.select}>
+                        <View style={styles.select}>
                             <Text style={styles.placeholder}>From</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => setOpen(true)} style={styles.rightElement}>
                         <Image style={{ width: 20, height: 20 }} source={Calendar} />
-                        <View  style={styles.select}>
+                        <View style={styles.select}>
                             <Text style={styles.placeholder}>To</Text>
                         </View>
                     </TouchableOpacity>
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     reasonContainer: {
         marginHorizontal: 10,
         backgroundColor: '#fff',
-        height: '30%',
+        height: '50%',
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
         padding: 20
     },
     blackButton: {
-        width: '90%',
+        width: '48%',
         height: 50,
         backgroundColor: 'black',
         justifyContent: 'center',
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
         borderRadius: 4
     },
     whiteButton: {
-        width: '90%',
+        width: '48%',
         height: 50,
         backgroundColor: 'white',
         justifyContent: 'center',
@@ -209,13 +209,17 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         borderWidth: 0.3,
         borderColor: 'black',
-        marginTop: 20
+        marginLeft: 20
     },
     buttonContainer: {
-        justifyContent: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        width: '100%',
-        marginTop: 40
+        width: '85%',
+        position: 'absolute',
+        bottom: 10,
+        marginHorizontal: 20,
+        left: 4
     },
     blackButtonText: {
         color: 'white',

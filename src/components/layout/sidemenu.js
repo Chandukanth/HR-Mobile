@@ -34,7 +34,7 @@ const SubMenu = ({ items, navigation, setMenuOpen }) => {
         <View style={{ marginLeft: 10 }}>
             <TouchableOpacity onPress={toggleCollapse}>
                 <View style={{ flexDirection: 'row', paddingTop: '10%', paddingLeft: 10, alignItems: 'center' }}>
-                    <Image style={{ width:  18, height: 18 , objectFit:'contain'}} source={items.image} />
+                    <Image style={{ width: 18, height: 18, objectFit: 'contain' }} source={items.image} />
 
                     <Text style={{ fontSize: 16, fontWeight: '300', color: 'black', fontFamily: 'Poppins-Medium', paddingLeft: 10 }}>{items.title}</Text>
                 </View>
@@ -90,6 +90,7 @@ const SideMenuContent = ({ navigation, setMenuOpen }) => {
             title: 'Shifts', image: Attendance, subItems: [
                 { name: 'My Shift', screen: 'MyShifts' },
                 { name: 'Shift Applications', screen: 'ShiftApplications' },
+                { name: 'Change Shift', screen: 'ChangeShift' }
             ]
         },
         {
