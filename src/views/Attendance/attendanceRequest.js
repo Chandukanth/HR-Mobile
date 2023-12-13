@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Layout from "../../components/layout";
-import { View, Text } from "react-native";
+import { View, Text, Image } from "react-native";
 import { ScrollView } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { AntDesign, Foundation, MaterialCommunityIcons } from "@expo/vector-icons";
 import BottomSheet from "../../components/BottomSheet";
 import { useNavigation } from "@react-navigation/native";
+import Avatar from "../../../assets/avatar/avatar.png"
 
 const AttendanceRequest = () => {
     const [isDrawerVisible, setDrawerVisible] = useState(false);
@@ -83,16 +84,20 @@ const AttendanceRequest = () => {
 
                 <View style={{ width: '100%', height: 60, backgroundColor: '#fff', marginTop: 10 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 30, marginVertical: 10, }}>
-                        <Text style={{ fontSize: 18, color: 'black', opacity: 0.7, fontFamily: 'Poppins-SemiBold' }}>Name</Text>
+                        <Text style={{ fontSize: 18, color: 'black', opacity: 0.7, fontFamily: 'Poppins-SemiBold', marginLeft: 20 }}>Name</Text>
                         <Text style={{ fontSize: 18, color: 'black', opacity: 0.7, fontFamily: 'Poppins-SemiBold' }}>Requests</Text>
 
                     </View>
                 </View>
                 {Data.map((item, index) => (
                     <TouchableOpacity onPress={() => navigation.navigate('AttendanceRequestDetail', { name: item.name })} key={index} style={{ width: '100%', height: 60, backgroundColor: '#fff', marginTop: 10, justifyContent: 'center' }}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 30, marginVertical: 10, alignItems: 'center' }}>
-                            <Text style={{ fontSize: 14, color: 'black', opacity: 0.7, fontFamily: 'Poppins-Regular' }}>{item.name}</Text>
-                            <Text style={{ fontSize: 14, color: 'black', opacity: 0.7, fontFamily: 'Poppins-Regular' }}>{item.request}</Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 15, marginVertical: 10, alignItems: 'center' }}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Image source={Avatar} style={{ width: 25, height: 25 }} />
+                                <Text style={{ fontSize: 14, color: 'black', opacity: 0.7, fontFamily: 'Poppins-Regular', marginLeft:8, marginTop:2 }}>{item.name}</Text>
+
+                            </View>
+                            <Text style={{ fontSize: 14, color: 'black', opacity: 0.7, fontFamily: 'Poppins-Regular', marginRight:20 }}>{item.request}</Text>
 
                         </View>
                     </TouchableOpacity>
