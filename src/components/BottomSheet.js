@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, StatusBar, StyleSheet, Text, View } from "react-native";
 import Modal from "react-native-modal";
 
-const BottomSheet = ({isModalVisible, setModalVisible, toggleModal, children}) => {
+const BottomSheet = ({ isModalVisible, setModalVisible, toggleModal, children, height }) => {
 
     return (
         <View style={styles.flexView}>
@@ -16,10 +16,10 @@ const BottomSheet = ({isModalVisible, setModalVisible, toggleModal, children}) =
                 swipeThreshold={0.5}
                 style={styles.modal}
             >
-                <View style={styles.modalContent}>
+                <View style={[styles.modalContent, { minHeight: height ? height : 400 }]}>
                     <View style={styles.center}>
                         <View style={styles.barIcon} />
-                      
+
                     </View>
                     {children}
                 </View>
@@ -59,5 +59,5 @@ const styles = StyleSheet.create({
         backgroundColor: "#bbb",
         borderRadius: 3,
     },
-  
+
 });
