@@ -11,10 +11,12 @@ import Absent from "../../../assets/days/absent.png"
 import present from "../../../assets/days/present.png"
 import { isClosingState } from "../../lib/atom";
 import { useRecoilState } from "recoil";
+import Chat from "../../../assets/new.png"
 
 const MyLeaves = () => {
     const [isClosing, setIsClosing] = useRecoilState(isClosingState);
     const [isDrawerVisible, setDrawerVisible] = useState(false);
+    const [isChating, setIsChating] = useState(false)
     const navigation = useNavigation()
     const toggleDrawer = () => {
         setDrawerVisible(!isDrawerVisible);
@@ -29,90 +31,122 @@ const MyLeaves = () => {
     ];
     return (
         <Layout title={'My Leaves'}>
-            {isDrawerVisible && (
-                <BottomSheet isModalVisible={isDrawerVisible} setModalVisible={setDrawerVisible} toggleModal={toggleDrawer} >
-
-                    <View style={{ flex: 0.70, flexDirection: "row", paddingTop: 20, justifyContent: 'space-evenly' }}>
-                        <View style={{ width: '50%', }}>
-                            <ScrollView showsVerticalScrollIndicator={false}>
-                                {monthNames.map((item) => (
-                                    <View style={{ height: 60, borderBottomWidth: 1, alignItems: 'center', justifyContent: 'center', borderBottomColor: 'lightgrey' }}>
-                                        <Text style={{ textAlign: 'left' }}>{item}</Text>
-                                    </View>
-                                ))}
-                            </ScrollView>
-                        </View>
-                        <View style={{ width: '50%', }}>
-                            <ScrollView showsVerticalScrollIndicator={false}>
-                                {years.map((item) => (
-                                    <View style={{ height: 60, borderBottomWidth: 1, alignItems: 'center', justifyContent: 'center', borderBottomColor: 'lightgrey' }}>
-                                        <Text style={{ textAlign: 'left' }}>{item}</Text>
-                                    </View>
-                                ))}
-                            </ScrollView>
-                        </View>
-
-                    </View>
-                    <View style={{ position: 'absolute', bottom: 10, width: '100%', justifyContent: 'center', alignItems: 'center', left: 5 }}>
-                        <TouchableOpacity onPress={toggleDrawer} style={{ width: '100%', height: 40, backgroundColor: 'black', borderRadius: 2, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginLeft: 10, marginBottom: 10 }}>
-                            <Text style={{ color: 'white', fontFamily: 'Poppins-Light' }}>Submit</Text>
-                        </TouchableOpacity>
-                    </View>
-
-
-                </BottomSheet>
-            )}
-            <View style={{ backgroundColor: '#f7f7f7', flex: 0.9 }}>
-                <TouchableOpacity onPress={toggleDrawer} style={{ width: '100%', height: 50, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 5 }}>
-                    <View style={{ flexDirection: 'row', opacity: 1, alignItems: 'center', marginLeft: 20 }}>
-                        <MaterialCommunityIcons name="calendar-outline" size={24} color="black" />
-                        <Text style={{ paddingLeft: 20, fontFamily: 'Poppins-Light' }}>Dec 2021</Text>
-                    </View>
-                    <View style={{ opacity: 1, alignItems: 'center', marginRight: 20 }}>
-                        <Foundation name="filter" size={24} color="black" />
-
-                    </View>
-                </TouchableOpacity>
-                <View style={{ alignItems: 'center', paddingTop: 20 }}>
-
-                    <View style={[styles.card, {elevation : isClosing ? 0 : 5}]}>
+            {isChating ? (
+                <View style={{ backgroundColor: '#f7f7f7', flex: 1, alignItems: 'center' }}>
+                    <View style={styles.chatcard}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 20, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
-                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Applied</Text>
+                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>From</Text>
                             <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>14 - Dec - 2021</Text>
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 20, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
-                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>From</Text>
-                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>14 - Nov - 2021</Text>
+                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>To</Text>
+                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>14 - Dec - 2021</Text>
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 20, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
-                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>To </Text>
-                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>18 - Nov - 2021</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 20, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
-                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Leave type </Text>
+                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Leave type</Text>
                             <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Casual</Text>
                         </View>
-                        <View style={{ marginLeft: 20, paddingTop: 20, }}>
-                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Reason</Text>
-
-                        </View>
-                        <View style={{ borderWidth: 1, borderColor: 'lightgrey', height: 50, borderRadius: 6, width: '90%', marginLeft: 20, marginTop: 20, justifyContent: 'center', alignItems: 'flex-start' }}>
-                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, marginLeft: 10 }}>Casual Leave</Text>
-                        </View>
-                        <TouchableOpacity onPress={toggleDrawer} style={{ width: '40%', height: 40, backgroundColor: 'black', borderRadius: 2, justifyContent: 'center', alignItems: 'center', marginTop: 20, marginLeft: 20, marginBottom: 10 }}>
-                            <Text style={{ color: 'white', fontFamily: 'Poppins-Light' }}>Approved</Text>
-                        </TouchableOpacity>
-
                     </View>
+
                 </View>
-            </View>
-            <View style={{ flex: 0.1, borderTopWidth: 1, borderTopColor: 'lightgrey' }}>
-                <View style={{ position: 'absolute', bottom: 5, width: '95%', justifyContent: 'center', alignItems: 'center', left: 5 }}>
-                    <TouchableOpacity onPress={()=> navigation.navigate("ApplyLeave")} style={{ width: '100%', height: 40, backgroundColor: 'black', borderRadius: 2, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginLeft: 10, marginBottom: 10 }}>
-                        <Text style={{ color: 'white', fontFamily: 'Poppins-Light' }}>Apply for Leave</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
+            ) : (
+                <>
+
+                    {isDrawerVisible && (
+                        <BottomSheet isModalVisible={isDrawerVisible} setModalVisible={setDrawerVisible} toggleModal={toggleDrawer} >
+
+                            <View style={{ flex: 0.70, flexDirection: "row", paddingTop: 20, justifyContent: 'space-evenly' }}>
+                                <View style={{ width: '50%', }}>
+                                    <ScrollView showsVerticalScrollIndicator={false}>
+                                        {monthNames.map((item) => (
+                                            <View style={{ height: 60, borderBottomWidth: 1, alignItems: 'center', justifyContent: 'center', borderBottomColor: 'lightgrey' }}>
+                                                <Text style={{ textAlign: 'left' }}>{item}</Text>
+                                            </View>
+                                        ))}
+                                    </ScrollView>
+                                </View>
+                                <View style={{ width: '50%', }}>
+                                    <ScrollView showsVerticalScrollIndicator={false}>
+                                        {years.map((item) => (
+                                            <View style={{ height: 60, borderBottomWidth: 1, alignItems: 'center', justifyContent: 'center', borderBottomColor: 'lightgrey' }}>
+                                                <Text style={{ textAlign: 'left' }}>{item}</Text>
+                                            </View>
+                                        ))}
+                                    </ScrollView>
+                                </View>
+
+                            </View>
+                            <View style={{ position: 'absolute', bottom: 10, width: '100%', justifyContent: 'center', alignItems: 'center', left: 5 }}>
+                                <TouchableOpacity onPress={toggleDrawer} style={{ width: '100%', height: 40, backgroundColor: 'black', borderRadius: 2, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginLeft: 10, marginBottom: 10 }}>
+                                    <Text style={{ color: 'white', fontFamily: 'Poppins-Light' }}>Submit</Text>
+                                </TouchableOpacity>
+                            </View>
+
+
+                        </BottomSheet>
+                    )}
+
+                    <View style={{ backgroundColor: '#f7f7f7', flex: 0.9 }}>
+                        <TouchableOpacity onPress={toggleDrawer} style={{ width: '100%', height: 50, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 5 }}>
+                            <View style={{ flexDirection: 'row', opacity: 1, alignItems: 'center', marginLeft: 20 }}>
+                                <MaterialCommunityIcons name="calendar-outline" size={24} color="black" />
+                                <Text style={{ paddingLeft: 20, fontFamily: 'Poppins-Light' }}>Dec 2021</Text>
+                            </View>
+                            <View style={{ opacity: 1, alignItems: 'center', marginRight: 20 }}>
+                                <Foundation name="filter" size={24} color="black" />
+
+                            </View>
+                        </TouchableOpacity>
+                        <View style={{ alignItems: 'center', paddingTop: 20 }}>
+
+                            <View style={[styles.card, { elevation: isClosing ? 0 : 5 }]}>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 20, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
+                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Applied</Text>
+                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>14 - Dec - 2021</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 20, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
+                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>From</Text>
+                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>14 - Nov - 2021</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 20, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
+                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>To </Text>
+                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>18 - Nov - 2021</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 20, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
+                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Leave type </Text>
+                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Casual</Text>
+                                </View>
+                                <View style={{ marginLeft: 20, paddingTop: 20, }}>
+                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Reason</Text>
+
+                                </View>
+                                <View style={{ borderWidth: 1, borderColor: 'lightgrey', height: 50, borderRadius: 6, width: '90%', marginLeft: 20, marginTop: 20, justifyContent: 'center', alignItems: 'flex-start' }}>
+                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, marginLeft: 10 }}>Casual Leave</Text>
+                                </View>
+                                <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <TouchableOpacity onPress={toggleDrawer} style={{ width: '70%', height: 40, backgroundColor: 'black', borderRadius: 2, justifyContent: 'center', alignItems: 'center', marginTop: 20, marginLeft: 20, marginBottom: 10 }}>
+                                        <Text style={{ color: 'white', fontFamily: 'Poppins-Light' }}>Approved</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => setIsChating(true)} style={{ height: 40, justifyContent: 'center', alignItems: 'center', marginRight: 10, marginTop: 10, width: 40, backgroundColor: '#f7f7f7' }}>
+                                        <Image style={{ width: 30, height: 30, marginTop: 5 }} source={Chat} />
+                                    </TouchableOpacity>
+
+                                </View>
+
+
+                            </View>
+                        </View>
+                    </View>
+                    <View style={{ flex: 0.1, borderTopWidth: 1, borderTopColor: 'lightgrey' }}>
+                        <View style={{ position: 'absolute', bottom: 5, width: '95%', justifyContent: 'center', alignItems: 'center', left: 5 }}>
+                            <TouchableOpacity onPress={() => navigation.navigate("ApplyLeave")} style={{ width: '100%', height: 40, backgroundColor: 'black', borderRadius: 2, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginLeft: 10, marginBottom: 10 }}>
+                                <Text style={{ color: 'white', fontFamily: 'Poppins-Light' }}>Apply for Leave</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </>
+            )}
+
         </Layout>
     )
 
@@ -125,6 +159,15 @@ const styles = StyleSheet.create({
         width: '85%',
         borderRadius: 12,
         elevation: 5,
+
+    },
+    chatcard: {
+        backgroundColor: '#fff',
+        height: '30%',
+        width: '85%',
+        borderRadius: 12,
+        elevation: 5,
+        marginTop: 10
 
     }
 })

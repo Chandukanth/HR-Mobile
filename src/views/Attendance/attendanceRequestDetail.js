@@ -72,8 +72,8 @@ const AttendanceRequestDetail = (props) => {
                         <View style={{ borderWidth: 1, borderColor: 'lightgrey', height: 50, borderRadius: 6, width: '90%', marginLeft: 20, marginTop: 20, justifyContent: 'center', alignItems: 'flex-start' }}>
                             <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, marginLeft: 10 }}>Forgot_to_punch</Text>
                         </View>
-                        <TouchableOpacity onPress={toggleDrawer} style={{ width: '90%', height: 40, backgroundColor: '#38a169', borderRadius: 2, justifyContent: 'center', alignItems: 'center', marginTop: 20, marginLeft: 20, marginBottom: 10 }}>
-                            <Text style={{ color: 'white', fontFamily: 'Poppins-Light' }}>Approved</Text>
+                        <TouchableOpacity onPress={toggleDrawer} style={{ width: '90%', height: 40, backgroundColor: '#87a197', borderRadius: 2, justifyContent: 'center', alignItems: 'center', marginTop: 20, marginLeft: 20, marginBottom: 10 }}>
+                            <Text style={{ color: '#48a272', fontFamily: 'Poppins-Light' }}>Approved</Text>
                         </TouchableOpacity>
 
                     </View>
