@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { isClosingState, sideMenu } from '../../lib/atom';
 import { useRecoilState } from 'recoil';
 
-const Layout = ({ children, title, noChildren, tabView, backButton }) => {
+const Layout = ({ children, title, noChildren, tabView, backButton, backPress }) => {
     const [isMenuOpen, setMenuOpen] = useRecoilState(sideMenu);
     const [isClosing, setIsClosing] = useRecoilState(isClosingState);
     const [marginTop, setMarginTop] = useState(0)
@@ -27,12 +27,21 @@ const Layout = ({ children, title, noChildren, tabView, backButton }) => {
         setMenuOpen(!isMenuOpen);
     };
     const closing = (value) => {
-        if(value > 0.95){
+        if (value > 0.95) {
             setMarginTop(value * 50)
-        }else{
+        } else {
             setMarginTop(0)
         }
         setIsClosing(value > 0.92)
+    }
+
+    const backButtonOnPress = () => {
+        if (backPress) {
+            backPress()
+        } else {
+            navigation.goBack()
+        }
+
     }
 
     return (
@@ -50,13 +59,13 @@ const Layout = ({ children, title, noChildren, tabView, backButton }) => {
                     backgroundColor: '#fff',
                     opacity: isClosing ? 0.5 : 1,
                     borderRadius: isClosing ? 12 : 0,
-                    marginVertical : isClosing ? 20 : 0,
-                    
+                    marginVertical: isClosing ? 20 : 0,
+
                 }}
             >
                 <View style={{ padding: 16, alignItems: 'center', flexDirection: 'row', borderBottomColor: 'lightgrey', borderBottomWidth: 1 }}>
                     {backButton ? (
-                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <TouchableOpacity onPress={backButtonOnPress}>
                             <AntDesign name="back" size={24} color="black" />
                         </TouchableOpacity>
                     ) : (
@@ -69,7 +78,7 @@ const Layout = ({ children, title, noChildren, tabView, backButton }) => {
                 </View>
 
                 {!noChildren && (
-                    <View style={{ flex:  1, }}>
+                    <View style={{ flex: 1, }}>
                         {children}
                     </View>
                 )}
