@@ -27,6 +27,7 @@ const FirstRoute = () => {
 
     const handlePress = () => {
         setIsPopoverOpen(!isPopoverOpen);
+        setSelectedReason("")
     };
 
     const toggleChangeModal = () => {
@@ -106,21 +107,32 @@ const FirstRoute = () => {
                 </BottomSheet>
             )}
             {isPopoverOpen && (
-                <BottomSheet height={"25%"} isModalVisible={isPopoverOpen} setModalVisible={setIsPopoverOpen} toggleModal={handlePress} >
-                    <Text style={{ textAlign: 'center', fontFamily: 'Poppins-SemiBold', fontSize: 16, paddingTop: 20 }}>Reason</Text>
-                    <View style={{ height: 300 }}>
+                <BottomSheet height={"20%"} isModalVisible={isPopoverOpen} setModalVisible={setIsPopoverOpen} toggleModal={handlePress} >
+                    <Text style={{ textAlign: 'center', fontFamily: 'Poppins-SemiBold', fontSize: 16, paddingTop: 20 }}>{selectedReason == 'Others' ? 'Type Reason' : 'Reason'}</Text>
+                    <View style={{ height: 200 }}>
                         <ScrollView>
 
                             <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgrey', marginHorizontal: 65, paddingTop: 10 }} />
+                            {selectedReason !== 'Others' && (
+                                <>
+                                    {Reason.map((item, index) => (
+                                        <TouchableOpacity key={index} onPress={() => {
+                                            if (item.name !== 'Others') {
+                                                handlePress()
+                                            }
 
-                            {Reason.map((item, index) => (
-                                <TouchableOpacity key={index} onPress={() => setSelectedReason(item.name)} style={{ flexDirection: 'row', alignItems: 'center', height: 60, borderBottomWidth: 1, borderBottomColor: 'lightgrey', marginHorizontal: 65, backgroundColor: selectedReason == item.name ? '#f7f7f7' : '#fff' }}>
-                                    <View style={{ flexDirection: 'row', marginLeft: '15%', alignItems: 'center' }}>
-                                        <Text style={{ fontFamily: 'Poppins-SemiBold', marginRight: 20 }} >{item.icon}</Text>
-                                        <Text style={{ fontFamily: 'Poppins-Regular' }}>{item.name}</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            ))}
+                                            setSelectedReason(item.name)
+
+                                        }} style={{ flexDirection: 'row', alignItems: 'center', height: 60, borderBottomWidth: 1, borderBottomColor: 'lightgrey', marginHorizontal: 65, backgroundColor: selectedReason == item.name ? '#f7f7f7' : '#fff' }}>
+                                            <View style={{ flexDirection: 'row', marginLeft: '15%', alignItems: 'center' }}>
+                                                <Text style={{ fontFamily: 'Poppins-SemiBold', marginRight: 20 }} >{item.icon}</Text>
+                                                <Text style={{ fontFamily: 'Poppins-Regular' }}>{item.name}</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    ))}
+                                </>
+                            )}
+
                             {selectedReason == 'Others' && (
                                 <View style={styles.reasonContainer}>
                                     <TextInput
@@ -134,7 +146,9 @@ const FirstRoute = () => {
                             )}
 
                         </ScrollView>
-                        <BlackButton onPress={handlePress} title={'Submit'} />
+                        {selectedReason == 'Others' && (
+                            <BlackButton onPress={handlePress} title={'Submit'} />
+                        )}
                     </View>
                 </BottomSheet>
             )}
@@ -360,7 +374,7 @@ const styles = StyleSheet.create({
     },
     textinput: {
         width: '90%',
-        height: '80%',
+        height: 150,
         backgroundColor: '#f7f7f7',
         padding: 20
     },
