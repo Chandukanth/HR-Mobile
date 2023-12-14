@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { isClosingState, sideMenu } from '../../lib/atom';
 import { useRecoilState } from 'recoil';
 
-const Layout = ({ children, title, noChildren, tabView, backButton, backPress }) => {
+const Layout = ({ children, title, noChildren, tabView, backButton, backPress, edgeHitWidth }) => {
     const [isMenuOpen, setMenuOpen] = useRecoilState(sideMenu);
     const [isClosing, setIsClosing] = useRecoilState(isClosingState);
     const [marginTop, setMarginTop] = useState(0)
@@ -51,7 +51,7 @@ const Layout = ({ children, title, noChildren, tabView, backButton, backPress })
             onChange={(isOpen) => setMenuOpen(isOpen)}
             onSliding={closing}
             openMenuOffset={300}
-            edgeHitWidth={200}
+            edgeHitWidth={edgeHitWidth ? edgeHitWidth : 300}
         >
             <Animated.View
                 style={{

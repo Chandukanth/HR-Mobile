@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import BottomSheet from "./BottomSheet";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import BlackButton from "./blackButton";
 
 const DateFilter = ({ isDrawerVisible, setDrawerVisible, toggleDrawer }) => {
+    const [selectedYear, setSelectedYear] = useState(null);
+    const [selectedMonth, setSelectedMonth] = useState(null)
     const monthNames = [
         'January', 'February', 'March', 'April',
         'May', 'June', 'July', 'August',
@@ -19,27 +22,25 @@ const DateFilter = ({ isDrawerVisible, setDrawerVisible, toggleDrawer }) => {
                 <View style={{ width: '50%', }}>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         {monthNames.map((item, index) => (
-                            <View key={index} style={{ height: 60, borderBottomWidth: 1, alignItems: 'center', justifyContent: 'center', borderBottomColor: 'lightgrey' }}>
+                            <TouchableOpacity onPress={() => setSelectedMonth(item)} key={index} style={{ height: 60, borderBottomWidth: 1, alignItems: 'center', justifyContent: 'center', borderBottomColor: 'lightgrey', backgroundColor : selectedMonth == item ? '#f7f7f7' : '#fff' }}>
                                 <Text style={{ textAlign: 'left' }}>{item}</Text>
-                            </View>
+                            </TouchableOpacity>
                         ))}
                     </ScrollView>
                 </View>
                 <View style={{ width: '50%', }}>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         {years.map((item, index) => (
-                            <View key={index} style={{ height: 60, borderBottomWidth: 1, alignItems: 'center', justifyContent: 'center', borderBottomColor: 'lightgrey' }}>
+                            <TouchableOpacity onPress={() => setSelectedYear(item)} key={index} style={{ height: 60, borderBottomWidth: 1, alignItems: 'center', justifyContent: 'center', borderBottomColor: 'lightgrey', backgroundColor : selectedYear == item ? '#f7f7f7' : '#fff' }}>
                                 <Text style={{ textAlign: 'left' }}>{item}</Text>
-                            </View>
+                            </TouchableOpacity>
                         ))}
                     </ScrollView>
                 </View>
 
             </View>
-            <View style={{ position: 'absolute', bottom: 10, width: '100%', justifyContent: 'center', alignItems: 'center', left: 5 }}>
-                <TouchableOpacity onPress={toggleDrawer} style={{ width: '100%', height: 40, backgroundColor: 'black', borderRadius: 2, justifyContent: 'center', alignItems: 'center', marginTop: 10, marginLeft: 10, marginBottom: 10 }}>
-                    <Text style={{ color: 'white', fontFamily: 'Poppins-Light' }}>Submit</Text>
-                </TouchableOpacity>
+            <View style={{ position: 'absolute', bottom: 10, width: '100%', justifyContent: 'center', left: 5 }}>
+                <BlackButton title={'Submit'} onPress={toggleDrawer} />
             </View>
 
 

@@ -9,3 +9,11 @@ export const sideMenu = atom({
     key: 'sideMenu',
     default: false,
   });
+  export const CategorySelect = atom({
+    key: 'category',
+    default: false,
+  });
+  export const activeTab = atom({
+    key: 'Tab',
+    default: 0,
+  });

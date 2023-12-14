@@ -21,19 +21,19 @@ const TeamAttendance = () => {
 
     const footer = (
         <View style={{ borderTopWidth: 0.5, borderColor: 'lightgrey' }}>
-            <TouchableOpacity onPress={openModal} style={{ flexDirection: 'row', width: '95%', height: 40, backgroundColor: 'white', borderRadius: 2, justifyContent: selectedName ? 'flex-start' : 'center', alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, borderColor: 'lightgrey' }}>
+            <TouchableOpacity onPress={openModal} style={{ flexDirection: 'row', width: '95%', height: 40, backgroundColor: 'white', borderRadius: 8, justifyContent: selectedName ? 'flex-start' : 'center', alignItems: 'center', marginTop: 10, marginLeft: 10, borderWidth: 1, borderColor: 'lightgrey' }}>
                 {selectedName && <Image source={Avatar} style={{ width: 25, height: 25, marginLeft: 10 }} />}
-                <Text style={{ color: 'black', fontFamily: selectedName ? 'Poppins-SemiBold' : 'Poppins-Light', opacity: selectedName ? 1 : 0.5, marginLeft: selectedName ? 10 : 0, marginTop: 5 }}>{selectedName ? selectedName : 'Select a team member'}</Text>
+                <Text style={{ color: 'black', fontFamily:  'Poppins-SemiBold' , opacity:  1, marginLeft: selectedName ? 10 : 0, marginTop: 5 }}>{selectedName ? selectedName : 'Select a team member'}</Text>
             </TouchableOpacity>
-            <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 10, marginLeft: 10, marginRight: 10, justifyContent: 'space-between' }}>
-                <View style={{ width: '50%', borderColor: 'lightgrey', borderWidth: 1, borderRadius: 2, paddingLeft: 15, height: 40, justifyContent: 'center' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 12, marginLeft: 10, marginRight: 10, justifyContent: 'space-between' }}>
+                <View style={{ width: '48%', borderColor: 'lightgrey', borderWidth: 1, borderRadius: 8, alignItems: 'center', height: 40, justifyContent: 'center' }}>
                     <Text style={{ fontSize: 12, fontFamily: 'Poppins-Light' }}>
                         Checked in <Text style={{ fontFamily: 'Poppins-SemiBold' }}>- 9:30AM</Text>
                     </Text>
                 </View>
-                <View style={{ width: '50%', borderColor: 'lightgrey', borderWidth: 1, borderRadius: 2, paddingLeft: 15, height: 40, justifyContent: 'center' }}>
+                <View style={{ width: '48%', borderColor: 'lightgrey', borderWidth: 1, borderRadius: 8, alignItems: 'center', height: 40, justifyContent: 'center' }}>
                     <Text style={{ fontSize: 12, fontFamily: 'Poppins-Light' }}>
-                        Checked out <Text style={{ fontFamily: 'Poppins-SemiBold' }}>- 7:30AM</Text>
+                        Shift <Text style={{ fontFamily: 'Poppins-SemiBold' }}>- Morning</Text>
                     </Text>
                 </View>
             </View>

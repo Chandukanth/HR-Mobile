@@ -44,10 +44,10 @@ const SubMenu = ({ items, navigation, setMenuOpen }) => {
             </TouchableOpacity>
 
             <Collapsible easing={'easeInOutCubic'} collapsed={isCollapsed}>
-                <View style={{  marginTop: 10 }}>
+                <View style={{ marginTop: 10 }}>
                     {items.subItems.map((subItem, index) => (
-                        <TouchableOpacity onPress={() => handleClick(subItem?.screen)} key={index} style={{backgroundColor : menuItemValue == subItem.screen ? '#f7f7f7' : '#fff', marginRight:10}} >
-                            <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10, paddingLeft: 15}}>
+                        <TouchableOpacity onPress={() => handleClick(subItem?.screen)} key={index} style={{ backgroundColor: menuItemValue == subItem.screen ? '#f7f7f7' : '#fff', marginRight: 10 }} >
+                            <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10, paddingLeft: 15 }}>
                                 <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: 'lightgrey' }} />
                                 <Text style={{ fontSize: 12, fontWeight: '300', paddingLeft: 15, fontFamily: 'Poppins-Light' }}>{subItem.name}</Text>
                             </View>
@@ -99,7 +99,7 @@ const SideMenuContent = ({ navigation, setMenuOpen }) => {
         {
             title: 'Claims', image: claims, width: 20, subItems: [
                 { name: 'My Claims', screen: 'MyClaims' },
-                { name: 'Applications', },
+                { name: 'Applications', screen: 'Applications' },
             ]
         },
     ];

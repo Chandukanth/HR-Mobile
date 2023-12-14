@@ -18,6 +18,7 @@ import ShiftApplications from './src/views/Shift/shiftApplication';
 import MyClaims from './src/views/Claims/myClaims';
 import ChangeShift from './src/views/Shift/changeShift';
 import { RecoilRoot } from 'recoil';
+import Applications from './src/views/Claims/applications';
 const loadFonts = async () => {
   await Font.loadAsync({
     'Poppins-Bold': require("./assets/fonts/Poppins-Bold.ttf"),
@@ -74,6 +75,8 @@ const App = () => {
 
 
           <Stack.Screen name="MyClaims" component={MyClaims} />
+          <Stack.Screen name="Applications" component={Applications} />
+
 
 
         </Stack.Navigator>

@@ -12,6 +12,7 @@ import StatusChat from "../../components/Ui/statusChat";
 import DateFilter from "../../components/DateFilter";
 import ChattingScreen from "../../components/Ui/chattingScreen";
 import ApprovedButton from "../../components/buttons/ApprovedButton";
+import { screenHeight } from "../../lib/heightwidth";
 
 
 const AttendanceRequestDetail = (props) => {
@@ -152,7 +153,7 @@ export default AttendanceRequestDetail
 const styles = StyleSheet.create({
     card: {
         backgroundColor: '#fff',
-        height: '70%',
+        height: screenHeight * 0.45,
         width: '85%',
         borderRadius: 12,
         elevation: 5,
