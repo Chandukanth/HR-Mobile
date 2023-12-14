@@ -16,23 +16,36 @@ import RejectButton from "../../components/buttons/RejectButton";
 import { CategorySelect, activeTab } from "../../lib/atom";
 import { useRecoilState } from "recoil";
 import DatePicker from "../../components/DatePicker";
+import Month from "../../../assets/calender.png"
+import category from "../../../assets/claims/category.png"
+import amount from "../../../assets/claims/amount.png"
+import distance from "../../../assets/claims/distance.png"
+import location from "../../../assets/claims/location.png"
+import mode from "../../../assets/claims/mode.png"
+import purpose from "../../../assets/claims/purpose.png"
+import People from "../../../assets/avatar/avatar.png"
 
-const Card = ({ onPress, title, placeHolder, marginTop }) => (
+
+
+const Card = ({ onPress, title, placeHolder, marginTop, image }) => (
     <View style={{ marginHorizontal: 20, marginTop }}>
         <Text style={{ textAlign: 'left', marginLeft: 15, textAlignVertical: 'center', marginBottom: 10, fontFamily: 'Poppins-Regular', fontSize: 16 }}>{title}</Text>
-        <View style={{ width: '100%', borderRadius: 8, elevation: 2, backgroundColor: '#fff', height: 90, justifyContent: 'center', alignItems: 'flex-end' }}>
-            <TouchableOpacity onPress={onPress} activeOpacity={0.8} style={{ alignItems: 'flex-start', justifyContent: 'center', width: '70%', height: 45, marginRight: 10, borderRadius: 8, backgroundColor: '#f1f1f1' }}>
+        <View style={{ width: '100%', borderRadius: 8, elevation: 2, backgroundColor: '#fff', height: 90, justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
+            <Image source={image} style={{ width: 25, height: 30, objectFit: 'contain', marginLeft: 30 }} />
+            <TouchableOpacity onPress={onPress} activeOpacity={0.8} style={{ alignItems: 'flex-start', justifyContent: 'center', width: '75%', height: 45, marginRight: 10, borderRadius: 8, backgroundColor: '#f1f1f1' }}>
                 <Text style={{ marginLeft: 20, fontFamily: 'Poppins-Medium', opacity: 0.4 }}>{placeHolder}</Text>
             </TouchableOpacity>
         </View>
     </View>
 )
 
-const CardInput = ({ onPress, title, placeHolder, marginTop, marginBottom }) => (
+const CardInput = ({ onPress, title, placeHolder, marginTop, marginBottom, image, width }) => (
     <View style={{ marginHorizontal: 20, marginTop, marginBottom }}>
         <Text style={{ textAlign: 'left', marginLeft: 15, textAlignVertical: 'center', marginBottom: 10, fontFamily: 'Poppins-Regular', fontSize: 16 }}>{title}</Text>
-        <View style={{ width: '100%', borderRadius: 8, elevation: 2, backgroundColor: '#fff', height: 90, justifyContent: 'center', alignItems: 'flex-end' }}>
-            <TouchableOpacity onPress={onPress} activeOpacity={0.8} style={{ alignItems: 'flex-start', justifyContent: 'center', width: '70%', height: 45, marginRight: 10, borderRadius: 8, backgroundColor: '#f1f1f1' }}>
+        <View style={{ width: '100%', borderRadius: 8, elevation: 2, backgroundColor: '#fff', height: 90, justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
+            <Image source={image} style={{ width: 25, height: 30, objectFit: 'contain', marginLeft: 30 }} />
+
+            <TouchableOpacity onPress={onPress} activeOpacity={0.8} style={{ alignItems: 'flex-start', justifyContent: 'center', width: '75%', height: 45, marginRight: 10, borderRadius: 8, backgroundColor: '#f1f1f1' }}>
                 <TextInput
                     placeholder={placeHolder}
                     style={{ marginLeft: 20, fontFamily: 'Poppins-Medium', width: '100%' }}
@@ -71,9 +84,17 @@ const FirstRoute = () => {
             }}>
                 {!selectedCategory && (
                     <>
-                        <Card onPress={toggleDrawer} title={'Month'} placeHolder={'Dec 2023'} />
-                        <Card onPress={openModal} title={'Category'} placeHolder={'Select'} marginTop={20} />
+                        <Card image={Month} onPress={toggleDrawer} title={'Month'} placeHolder={'Dec 2023'} />
+                        <Card image={category} onPress={openModal} title={'Category'} placeHolder={'Select'} marginTop={20} />
                     </>
+                )}
+                {selectedCategory && (
+                    <View onPress={toggleDrawer} style={{ width: '100%', height: 50, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 5, backgroundColor: '#fff' }}>
+                        <View style={{ flexDirection: 'row', opacity: 1, alignItems: 'center', marginLeft: 20 }}>
+                            <MaterialCommunityIcons onPress={()=> setSelectedCategory(null)} name="arrow-left" size={24} color="black" />
+                            <Text onPress={openModal} style={{ fontFamily: 'Poppins-SemiBold', fontSize: 14, opacity: 0.5, paddingLeft: '40%', textAlign : 'center' }}>{selectedCategory ? selectedCategory : 'Select a Category'}</Text>
+                        </View>
+                    </View>
                 )}
                 <DatePicker isDatePickerVisible={isDatePickerVisible} setDatePickerVisibility={setIsDatePickerVisible} setSelectedDate={setSelectedDate} />
                 {selectedCategory == 'Travel' && (
@@ -82,12 +103,12 @@ const FirstRoute = () => {
                         <ScrollView>
                             {currentAdd.map((item, index) => (
                                 <View key={index}>
-                                    <Card onPress={() => setIsDatePickerVisible(true)} title={'Date'} placeHolder={selectedDate ? selectedDate : '01 Dec'} marginTop={20} />
-                                    <Card title={'Mode'} placeHolder={'Select'} marginTop={20} />
-                                    <CardInput title={'From'} placeHolder={'Location'} marginTop={20} />
-                                    <CardInput title={'To'} placeHolder={'Destination'} marginTop={20} />
-                                    <CardInput title={'Purpose'} placeHolder={'Enter'} marginTop={20} />
-                                    <CardInput title={'Distance'} placeHolder={'Enter Kilometers'} marginTop={20} />
+                                    <Card image={Month} onPress={() => setIsDatePickerVisible(true)} title={'Date'} placeHolder={selectedDate ? selectedDate : '01 Dec'} marginTop={20} />
+                                    <Card image={mode} title={'Mode'} placeHolder={'Select'} marginTop={20} />
+                                    <CardInput image={location} title={'From'} placeHolder={'Location'} marginTop={20} />
+                                    <CardInput image={location} title={'To'} placeHolder={'Destination'} marginTop={20} />
+                                    <CardInput image={purpose} title={'Purpose'} placeHolder={'Enter'} marginTop={20} />
+                                    <CardInput image={distance} title={'Distance'} placeHolder={'Enter Kilometers'} marginTop={20} />
                                     <CardInput title={'Amount'} placeHolder={'Enter Amount'} marginTop={20} marginBottom={20} />
                                 </View>
                             ))}
@@ -105,10 +126,10 @@ const FirstRoute = () => {
                     <ScrollView>
                         {currentAdd.map((item, index) => (
                             <View key={index}>
-                                <Card onPress={() => setIsDatePickerVisible(true)} title={'Date'} placeHolder={selectedDate ? selectedDate : '01 Dec'} marginTop={20} />
-                                <CardInput title={'People'} placeHolder={'Select'} marginTop={20} />
-                                <CardInput title={'Place'} placeHolder={'Select'} marginTop={20} />
-                                <CardInput title={'Purpose'} placeHolder={'Select'} marginTop={20} />
+                                <Card image={Month} onPress={() => setIsDatePickerVisible(true)} title={'Date'} placeHolder={selectedDate ? selectedDate : '01 Dec'} marginTop={20} />
+                                <CardInput image={People} title={'People'} placeHolder={'Select'} marginTop={20} />
+                                <CardInput image={location} title={'Place'} placeHolder={'Select'} marginTop={20} />
+                                <CardInput image={purpose} title={'Purpose'} placeHolder={'Select'} marginTop={20} />
                                 <CardInput title={'Amount'} placeHolder={'Enter Amount'} marginTop={20} marginBottom={20} />
                             </View>
                         ))}

@@ -179,7 +179,7 @@ export default LeaveRequest
 const styles = StyleSheet.create({
     card: {
         backgroundColor: '#fff',
-        height: screenHeight * 0.59,
+        height: 440,
         width: '84%',
         borderRadius: 12,
         elevation: 5,

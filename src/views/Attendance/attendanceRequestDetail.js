@@ -153,7 +153,7 @@ export default AttendanceRequestDetail
 const styles = StyleSheet.create({
     card: {
         backgroundColor: '#fff',
-        height: screenHeight * 0.45,
+        height: 340,
         width: '85%',
         borderRadius: 12,
         elevation: 5,

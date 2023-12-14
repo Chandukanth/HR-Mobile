@@ -168,7 +168,7 @@ export default MyLeaves
 const styles = StyleSheet.create({
     card: {
         backgroundColor: '#fff',
-        height: screenHeight * 0.527,
+        height: 395,
         width: '85%',
         borderRadius: 12,
         elevation: 5,

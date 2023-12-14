@@ -156,7 +156,7 @@ export default ChangeShift
 const styles = StyleSheet.create({
     card: {
         backgroundColor: '#fff',
-        height: screenHeight * 0.51,
+        height: 383,
         width: '85%',
         borderRadius: 12,
         elevation: 5,

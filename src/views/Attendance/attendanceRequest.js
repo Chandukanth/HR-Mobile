@@ -83,9 +83,9 @@ const AttendanceRequest = () => {
                 </TouchableOpacity>
 
                 <View style={{ width: '100%', height: 60, backgroundColor: '#fff', marginTop: 10 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 30, marginVertical: 10, }}>
-                        <Text style={{ fontSize: 18, color: 'black', opacity: 0.7, fontFamily: 'Poppins-SemiBold', marginLeft: 20 }}>Name</Text>
-                        <Text style={{ fontSize: 18, color: 'black', opacity: 0.7, fontFamily: 'Poppins-SemiBold' }}>Requests</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 30, marginVertical: 10, alignItems:'center' }}>
+                        <Text style={{ fontSize: 18, color: 'black', opacity: 0.7, fontFamily: 'Poppins-SemiBold', marginLeft: 20, marginTop : 8 }}>Name</Text>
+                        <Text style={{ fontSize: 18, color: 'black', opacity: 0.7, fontFamily: 'Poppins-SemiBold', marginTop : 8 }}>Requests</Text>
 
                     </View>
                 </View>

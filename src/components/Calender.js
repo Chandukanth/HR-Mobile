@@ -108,7 +108,12 @@ const Calender = ({ footer, shift }) => {
                                     {!shift ?
                                         <>
                                             {day !== null && day == 2 ? <Image style={{ width: 20, height: 20, marginTop: 3 }} source={require("../../assets/days/present.png")} /> : day !== null && <Image style={{ width: 20, height: 20, marginTop: 3, opacity: 0.5 }} source={require("../../assets/days/notassigned.png")} />}
-                                        </> : <Text style={{fontFamily : 'Poppins-Medium', color : '#03543e'}}>MS</Text>}
+                                        </> :
+                                        <View style={{width:30, height:30, borderRadius : 20, backgroundColor : '#f1f1f1', justifyContent:'center', alignItems:'center'}}>
+                                            <Text style={{ fontFamily: 'Poppins-Medium', color: '#03543e', fontSize:12 }}>MS</Text>
+                                        </View>
+                                    }
+
                                 </TouchableOpacity>
                             )}
                             numColumns={7} // Number of columns in the calendar

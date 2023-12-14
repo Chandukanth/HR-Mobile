@@ -96,9 +96,9 @@ const FirstRoute = () => {
                     <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgrey', marginHorizontal: 65, paddingTop: 10 }} />
 
                     {changeStatus.map((item, index) => (
-                        <TouchableOpacity key={index} onPress={toggleChangeModal} style={{ flexDirection: 'row', alignItems: 'center', height: 60, borderBottomWidth: 1, borderBottomColor: 'lightgrey', marginHorizontal: 65, justifyContent:'space-between'}}>
-                            <View style={{ flexDirection: 'row', marginLeft: '15%', alignItems: 'center' }}>
-                                <Image style={{ width: 20, height: 30, objectFit: 'contain', marginRight: 70 }} source={item.image} />
+                        <TouchableOpacity key={index} onPress={toggleChangeModal} style={{ flexDirection: 'row', alignItems: 'center', height: 60, borderBottomWidth: 1, borderBottomColor: 'lightgrey', marginHorizontal: 65, }}>
+                            <View style={{ flexDirection: 'row', marginLeft: '28%', alignItems: 'center' }}>
+                                <Image style={{ width: 20, height: 30, objectFit: 'contain', marginRight: 20 }} source={item.image} />
                                 <Text>{item.name}</Text>
                             </View>
                         </TouchableOpacity>
@@ -123,16 +123,16 @@ const FirstRoute = () => {
                             ))}
                             {selectedReason == 'Others' && (
                                 <View style={styles.reasonContainer}>
-                                <TextInput
-                                    style={styles.textinput}
-                                    multiline
-                                    numberOfLines={10}
-                                    placeholder="Write a reason here"
-                                />
+                                    <TextInput
+                                        style={styles.textinput}
+                                        multiline
+                                        numberOfLines={10}
+                                        placeholder="Write a reason here"
+                                    />
 
-                            </View>
+                                </View>
                             )}
-                            
+
                         </ScrollView>
                         <BlackButton onPress={handlePress} title={'Submit'} />
                     </View>
