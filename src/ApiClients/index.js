@@ -21,26 +21,24 @@ class apiClient {
       let refresh_token = await AsyncStorage.getItem(
         AsyncStorageConstants.REFRESH_TOKEN
       );
-      console.log("Refresh_token", refresh_token);
       let body = {
-        refresh_token
+        refresh_token,
       };
       const response = await axiosClient.post(REFRESH_URL, body);
-      console.log("Refresh_token2", response.data.refresh_token);
-      await AsyncStorage.setItem(AsyncStorageConstants.REFRESH_TOKEN, response.data.refresh_token)
+      await AsyncStorage.setItem(
+        AsyncStorageConstants.REFRESH_TOKEN,
+        response.data.refresh_token
+      );
       return response.data.access_token;
     } catch (error) {
       console.log(error, ">sessionToken error");
-      AsyncStorage.clearAll();
-      navigate("Login", {})
+    
     }
   }
 
-
-
   static async post(url, body) {
     try {
-      let sessionToken = this.getSessionToken()
+      let sessionToken = await this.getSessionToken();
       axiosClient.defaults.headers.common["Authorization"] = `Bearer ${sessionToken}`;
 
       const response = await axiosClient.post(url, body);
@@ -54,24 +52,20 @@ class apiClient {
 
   static async get(url) {
     try {
-      let sessionToken = await this.getSessionToken()
-
-      console.log(sessionToken, ">>>>>get>>>>>>>>>>>");
-
+      let sessionToken = await this.getSessionToken();
       axiosClient.defaults.headers.common["Authorization"] = `Bearer ${sessionToken}`;
 
       const response = await axiosClient.get(url);
       return response;
     } catch (error) {
-      console.error(error.response.detail);
+      console.error(error);
       throw error;
     }
   }
 
   static async put(url, body) {
     try {
-      let sessionToken = this.getSessionToken()
-
+      let sessionToken = await this.getSessionToken();
       axiosClient.defaults.headers.common["Authorization"] = `Bearer ${sessionToken}`;
 
       const response = await axiosClient.put(url, body);
@@ -85,8 +79,7 @@ class apiClient {
 
   static async delete(url) {
     try {
-      let sessionToken = this.getSessionToken()
-
+      let sessionToken = await this.getSessionToken();
       axiosClient.defaults.headers.common["Authorization"] = `Bearer ${sessionToken}`;
 
       const response = await axiosClient.delete(url);
@@ -107,7 +100,7 @@ class apiClient {
       const response = await axios.post(url, bodyData, {
         headers: {
           Authorization: sessionToken,
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
         },
       });
 
@@ -120,3 +113,4 @@ class apiClient {
 }
 
 export default apiClient;
+

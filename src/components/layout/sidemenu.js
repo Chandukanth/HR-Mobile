@@ -73,6 +73,7 @@ const SideMenuContent = ({ navigation, setMenuOpen }) => {
     useEffect(() => {
         getCompanyDetail()
     }, [])
+
     const getCompanyDetail = async () => {
         const response = await CompanyService.get()
         setCompanyDetail(response.data)

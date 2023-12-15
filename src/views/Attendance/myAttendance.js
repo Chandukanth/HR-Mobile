@@ -11,11 +11,9 @@ import { useQuery } from "@tanstack/react-query";
 
 const MyAttendance = () => {
     const [attendanceData, setAttendanceData] = useState([])
-
-    console.log(attendanceData);
     useEffect(() => {
         getDetails()
-    },[])
+    }, [])
     const getDetails = async () => {
         const response = await AttendanceService.get();
         setAttendanceData(response)
