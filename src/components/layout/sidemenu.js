@@ -1,6 +1,6 @@
 // SideMenuContent.js
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import Collapsible from 'react-native-collapsible';
@@ -11,18 +11,27 @@ import salary from "../../../assets/sidebarIcons/salaryIcon.png"
 import team from "../../../assets/sidebarIcons/teamIcon.png"
 import claims from "../../../assets/sidebarIcons/claimsIcon.png"
 import { useRoute } from '@react-navigation/core';
+import CompanyService from '../../Services/CompanyService';
+import { useRecoilState } from 'recoil';
+import { projectId } from '../../lib/atom';
 
 
 
 const SubMenu = ({ items, navigation, setMenuOpen }) => {
+
+
     const [isCollapsed, setCollapsed] = useState(false);
     const [activeMenu, setActiveMenu] = useState("MyAttendance")
     const route = useRoute();
     const routeNameArray = route.name.split('/');
     const menuItemValue = routeNameArray[0];
+
+
     const toggleCollapse = () => {
         setCollapsed(!isCollapsed);
     };
+
+
 
     const handleClick = (screen) => {
         setMenuOpen(false)
@@ -59,6 +68,15 @@ const SubMenu = ({ items, navigation, setMenuOpen }) => {
     );
 };
 const SideMenuContent = ({ navigation, setMenuOpen }) => {
+    const [companyDetail, setCompanyDetail] = useState([])
+    const [selectedProject, setSelectedProject] = useRecoilState(projectId)
+    useEffect(() => {
+        getCompanyDetail()
+    }, [])
+    const getCompanyDetail = async () => {
+        const response = await CompanyService.get()
+        setCompanyDetail(response.data)
+    }
     const navigateToScreen = (screenName) => {
         navigation.navigate(screenName);
     };
@@ -110,9 +128,18 @@ const SideMenuContent = ({ navigation, setMenuOpen }) => {
             <View style={{ flexDirection: 'row', flex: 1 }}>
                 {/* First View (20px width) */}
                 <View style={{ width: 40, flexDirection: 'column', justifyContent: 'space-between', marginTop: '20%', marginBottom: '20%', marginLeft: 10 }}>
-                    <View style={{ width: 40, height: 40, borderRadius: 30, backgroundColor: 'lightgrey', justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ color: 'white' }}>PC</Text>
+                    <View style={{  }}>
+                        {companyDetail.map((item, index) => (
+                            <TouchableOpacity onPress={()=>{
+                                setSelectedProject(item.id);
+                                setMenuOpen(false)
+                            }} key={index} style={{ width: 40, height: 40, borderRadius: 30, backgroundColor: 'lightgrey', justifyContent: 'center', alignItems: 'center',marginBottom: 10 }}>
+                                <Text style={{ color: 'white' }}>{item?.name.substring(0, 2)}</Text>
+                            </TouchableOpacity>
+                        ))}
                     </View>
+
+
                     <View style={{ width: 40, height: 40, borderRadius: 30, backgroundColor: 'lightgrey', justifyContent: 'center', alignItems: 'center' }}>
                         <AntDesign name="logout" size={18} color="white" />
                     </View>

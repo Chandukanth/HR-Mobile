@@ -17,3 +17,7 @@ export const sideMenu = atom({
     key: 'Tab',
     default: 0,
   });
+  export const projectId = atom({
+    key: 'project',
+    default: 0,
+  });

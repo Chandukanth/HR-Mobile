@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, FlatList, ScrollView, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import BottomSheet from "./BottomSheet";
+import AttendanceService from "../Services/AttendanceService";
 
 const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 
@@ -21,7 +22,7 @@ const getMonthName = (month) => {
     return monthNames[month];
 };
 
-const Calender = ({ footer, shift }) => {
+const Calender = ({ footer, shift, data }) => {
     const [selectedYear, setSelectedYear] = useState(2023);
     const [sideBarOpen, setSideBarOpen] = useState(false)
     const [selectedMonth, setSelectedMonth] = useState(null)
@@ -29,6 +30,8 @@ const Calender = ({ footer, shift }) => {
     const toggleDrawer = () => {
         setDrawerVisible(!isDrawerVisible);
     };
+
+   
     const years = [
         ...Array.from({ length: 2100 - 2012 + 1 }, (_, index) => 2012 + index),
     ];
@@ -60,6 +63,8 @@ const Calender = ({ footer, shift }) => {
     const detailsSelect = (month) => {
         navigation.navigate("AttendanceDetail", { month })
     }
+
+  
 
     const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     return (
@@ -105,14 +110,18 @@ const Calender = ({ footer, shift }) => {
                                 >
 
                                     {day !== null && <Text>{day}</Text>}
-                                    {!shift ?
+                                    {data && day !== null ? (
                                         <>
-                                            {day !== null && day == 2 ? <Image style={{ width: 20, height: 20, marginTop: 3 }} source={require("../../assets/days/present.png")} /> : day !== null && <Image style={{ width: 20, height: 20, marginTop: 3, opacity: 0.5 }} source={require("../../assets/days/notassigned.png")} />}
-                                        </> :
-                                        <View style={{width:30, height:30, borderRadius : 20, backgroundColor : '#f1f1f1', justifyContent:'center', alignItems:'center'}}>
-                                            <Text style={{ fontFamily: 'Poppins-Medium', color: '#03543e', fontSize:12 }}>MS</Text>
-                                        </View>
-                                    }
+                                            {data}
+                                        </>
+                                    ) : (
+                                        <>
+                                            {day !== null && < Image style={{ width: 20, height: 20, marginTop: 3, opacity: 0.5 }} source={require("../../assets/days/notassigned.png")} />}
+                                        </>
+                                    )}
+
+
+
 
                                 </TouchableOpacity>
                             )}
