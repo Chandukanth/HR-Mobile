@@ -14,6 +14,7 @@ import { useRoute } from '@react-navigation/core';
 import CompanyService from '../../Services/CompanyService';
 import { useRecoilState } from 'recoil';
 import { projectId } from '../../lib/atom';
+import AsyncStorageObject from '../../lib/AsyncStorage';
 
 
 
@@ -67,7 +68,7 @@ const SubMenu = ({ items, navigation, setMenuOpen }) => {
         </View>
     );
 };
-const SideMenuContent = ({ navigation, setMenuOpen }) => {
+const SideMenuContent = ({ navigation, setMenuOpen, setIsClosing }) => {
     const [companyDetail, setCompanyDetail] = useState([])
     const [selectedProject, setSelectedProject] = useRecoilState(projectId)
     useEffect(() => {
@@ -129,21 +130,26 @@ const SideMenuContent = ({ navigation, setMenuOpen }) => {
             <View style={{ flexDirection: 'row', flex: 1 }}>
                 {/* First View (20px width) */}
                 <View style={{ width: 40, flexDirection: 'column', justifyContent: 'space-between', marginTop: '20%', marginBottom: '20%', marginLeft: 10 }}>
-                    <View style={{  }}>
+                    <View style={{}}>
                         {companyDetail.map((item, index) => (
-                            <TouchableOpacity onPress={()=>{
+                            <TouchableOpacity onPress={() => {
                                 setSelectedProject(item.id);
                                 setMenuOpen(false)
-                            }} key={index} style={{ width: 40, height: 40, borderRadius: 30, backgroundColor: 'lightgrey', justifyContent: 'center', alignItems: 'center',marginBottom: 10 }}>
+                            }} key={index} style={{ width: 40, height: 40, borderRadius: 30, backgroundColor: 'lightgrey', justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
                                 <Text style={{ color: 'white' }}>{item?.name.substring(0, 2)}</Text>
                             </TouchableOpacity>
                         ))}
                     </View>
 
 
-                    <View style={{ width: 40, height: 40, borderRadius: 30, backgroundColor: 'lightgrey', justifyContent: 'center', alignItems: 'center' }}>
+                    <TouchableOpacity onPress={() => {
+                        setMenuOpen(false)
+                        setIsClosing(false)
+                        navigation.navigate('Login')
+                        AsyncStorageObject.clearAll()
+                    }} style={{ width: 40, height: 40, borderRadius: 30, backgroundColor: 'lightgrey', justifyContent: 'center', alignItems: 'center' }}>
                         <AntDesign name="logout" size={18} color="white" />
-                    </View>
+                    </TouchableOpacity>
                 </View>
 
                 {/* Second View (Remaining width) */}

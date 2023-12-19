@@ -43,7 +43,9 @@ const MyAttendance = () => {
 
     return (
         <Layout title={`My Attendance`}>
-            <Calender footer={footer} />
+            
+                <Calender footer={footer} />
+           
         </Layout>
     );
 };

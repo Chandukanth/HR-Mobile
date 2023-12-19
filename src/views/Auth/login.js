@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, TextInput, View, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { Text, TextInput, View, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from "react-native";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/core";
 import { AUTH_URL } from "../../../config";
@@ -11,31 +11,31 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [usernameError, setUsernameError] = useState("");
     const [passwordError, setPasswordError] = useState("");
+    const [isLoading, setIsLoading] = useState(false)
     const navigation = useNavigation()
     const toast = useToast();
 
-    useEffect(() => {
-        (async () => {
-            const sessionToken = await AsyncStorageObject.getItem(AsyncStorage.ACCESS_TOKEN)
-            if (sessionToken) {
-                navigation.navigate("MyAttendance");
-            }
-        })();
-    }, []);
-    const handleLogin = async () => {
 
+    const handleLogin = async () => {
+        setIsLoading(true)
         if (!username.trim() && !password.trim()) {
             setUsernameError("Username is required");
             setPasswordError("Password is required")
+            setIsLoading(false)
+
             return;
         }
         if (!username.trim()) {
             setUsernameError("Username is required");
+            setIsLoading(false)
+
             return;
         }
 
         if (!password.trim()) {
             setPasswordError("Password is required");
+            setIsLoading(false)
+
             return;
         }
 
@@ -57,7 +57,10 @@ const Login = () => {
                     animationType: "zoom-in",
                 });
                 navigation.navigate("MyAttendance")
+                setIsLoading(false)
+
             }).catch((error) => {
+                setIsLoading(false)
                 const errorRequest = error?.response?.request;
                 let errorMessage = JSON.parse(errorRequest.response).detail;
                 toast.show('Invalid username or password ', {
@@ -111,8 +114,8 @@ const Login = () => {
             />
             {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
 
-            <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-                <Text style={styles.buttonText}>Login</Text>
+            <TouchableOpacity disabled={isLoading} style={styles.loginButton} onPress={handleLogin}>
+                <Text style={styles.buttonText}> {isLoading ? <ActivityIndicator size="small" color="#fff" /> : 'Login'}</Text>
             </TouchableOpacity>
         </View>
     );
@@ -156,6 +159,8 @@ const styles = StyleSheet.create({
         color: "white",
         fontFamily: "Poppins-Medium",
         fontSize: 15,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly'
     },
     errorText: {
         color: "red",

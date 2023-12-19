@@ -11,7 +11,7 @@ const Layout = ({ children, title, noChildren, tabView, backButton, backPress, e
     const [isMenuOpen, setMenuOpen] = useRecoilState(sideMenu);
     const [isClosing, setIsClosing] = useRecoilState(isClosingState);
     const [marginTop, setMarginTop] = useState(0)
-
+    const [open, setisOpen] = useState(false)
     const navigation = useNavigation();
     const translateY = useRef(new Animated.Value(0)).current;
 
@@ -33,6 +33,7 @@ const Layout = ({ children, title, noChildren, tabView, backButton, backPress, e
             setMarginTop(0)
         }
         setIsClosing(value > 0.92)
+        setisOpen(value > 0.001)
     }
 
     const backButtonOnPress = () => {
@@ -46,7 +47,7 @@ const Layout = ({ children, title, noChildren, tabView, backButton, backPress, e
 
     return (
         <SideMenu
-            menu={<SideMenuContent navigation={navigation} setMenuOpen={setMenuOpen} />}
+            menu={open && <SideMenuContent navigation={navigation} setMenuOpen={setMenuOpen} setIsClosing={setIsClosing} />}
             isOpen={isMenuOpen}
             onChange={(isOpen) => setMenuOpen(isOpen)}
             onSliding={closing}
@@ -78,7 +79,7 @@ const Layout = ({ children, title, noChildren, tabView, backButton, backPress, e
                 </View>
 
                 {!noChildren && (
-                    <View style={{ flex: 1, }}>
+                    <View style={{ flex: 1 }}>
                         {children}
                     </View>
                 )}
