@@ -15,6 +15,15 @@ class CheckInService {
             console.log(err);
         }
     }
+    static async post(data) {
+        try {
+            const response = apiClient.post(`${endpoints().HrCheckInApi}`, data)
+            return (await response).data;
+
+        } catch (error) {
+            console.log(error.response);
+        }
+    }
 
 
 

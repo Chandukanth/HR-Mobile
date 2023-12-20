@@ -13,7 +13,7 @@ import claims from "../../../assets/sidebarIcons/claimsIcon.png"
 import { useRoute } from '@react-navigation/core';
 import CompanyService from '../../Services/CompanyService';
 import { useRecoilState } from 'recoil';
-import { projectId } from '../../lib/atom';
+import { company, projectId } from '../../lib/atom';
 import AsyncStorageObject from '../../lib/AsyncStorage';
 
 
@@ -69,10 +69,13 @@ const SubMenu = ({ items, navigation, setMenuOpen }) => {
     );
 };
 const SideMenuContent = ({ navigation, setMenuOpen, setIsClosing }) => {
-    const [companyDetail, setCompanyDetail] = useState([])
+    const [companyDetail, setCompanyDetail] = useRecoilState(company)
     const [selectedProject, setSelectedProject] = useRecoilState(projectId)
     useEffect(() => {
-        getCompanyDetail()
+        if (companyDetail.length == 0) {
+            getCompanyDetail()
+
+        }
     }, [])
 
     const getCompanyDetail = async () => {

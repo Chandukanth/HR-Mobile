@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout";
 import { View, Text, Image } from "react-native";
 import { ScrollView } from "react-native";
@@ -7,10 +7,17 @@ import { AntDesign, Foundation, MaterialCommunityIcons } from "@expo/vector-icon
 import BottomSheet from "../../components/BottomSheet";
 import { useNavigation } from "@react-navigation/native";
 import Avatar from "../../../assets/avatar/avatar.png"
+import UserService from "../../Services/UserService";
 
 const AttendanceRequest = () => {
     const [isDrawerVisible, setDrawerVisible] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
+    const [userList, setUserList] = useState([])
     const navigation = useNavigation()
+
+    useEffect(() => {
+        getUserList()
+    }, [])
 
     const toggleDrawer = () => {
         setDrawerVisible(!isDrawerVisible);
@@ -30,13 +37,21 @@ const AttendanceRequest = () => {
 
     ]
 
+    const getUserList = async () => {
+        setIsLoading(true)
+        let response = await UserService.get()
+        setUserList(response.data)
+        setIsLoading(false)
+
+    }
+
     const monthNames = [
         'January', 'February', 'March', 'April',
         'May', 'June', 'July', 'August',
         'September', 'October', 'November', 'December',
     ];
     return (
-        <Layout title={'Attendance Requests'}>
+        <Layout isLoading={isLoading} title={'Attendance Requests'}>
             {isDrawerVisible && (
                 <BottomSheet isModalVisible={isDrawerVisible} setModalVisible={setDrawerVisible} toggleModal={toggleDrawer} >
 
@@ -83,25 +98,28 @@ const AttendanceRequest = () => {
                 </TouchableOpacity>
 
                 <View style={{ width: '100%', height: 60, backgroundColor: '#fff', marginTop: 10 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 30, marginVertical: 10, alignItems:'center' }}>
-                        <Text style={{ fontSize: 18, color: 'black', opacity: 0.7, fontFamily: 'Poppins-SemiBold', marginLeft: 20, marginTop : 8 }}>Name</Text>
-                        <Text style={{ fontSize: 18, color: 'black', opacity: 0.7, fontFamily: 'Poppins-SemiBold', marginTop : 8 }}>Requests</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 30, marginVertical: 10, alignItems: 'center' }}>
+                        <Text style={{ fontSize: 18, color: 'black', opacity: 0.7, fontFamily: 'Poppins-SemiBold', marginLeft: 20, marginTop: 8 }}>Name</Text>
+                        <Text style={{ fontSize: 18, color: 'black', opacity: 0.7, fontFamily: 'Poppins-SemiBold', marginTop: 8 }}>Requests</Text>
 
                     </View>
                 </View>
-                {Data.map((item, index) => (
-                    <TouchableOpacity onPress={() => navigation.navigate('AttendanceRequestDetail', { name: item.name })} key={index} style={{ width: '100%', height: 60, backgroundColor: '#fff', marginTop: 10, justifyContent: 'center' }}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 15, marginVertical: 10, alignItems: 'center' }}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Image source={Avatar} style={{ width: 25, height: 25 }} />
-                                <Text style={{ fontSize: 14, color: 'black', opacity: 0.7, fontFamily: 'Poppins-Regular', marginLeft:8, marginTop:2 }}>{item.name}</Text>
+                <ScrollView>
+                    {userList && userList.length > 0 && userList.map((item, index) => (
+                        <TouchableOpacity onPress={() => navigation.navigate('AttendanceRequestDetail', { name: item.name })} key={index} style={{ width: '100%', height: 60, backgroundColor: '#fff', marginTop: 10, justifyContent: 'center' }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 15, marginVertical: 10, alignItems: 'center' }}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Image source={Avatar} style={{ width: 25, height: 25 }} />
+                                    <Text style={{ fontSize: 14, color: 'black', opacity: 0.7, fontFamily: 'Poppins-Regular', marginLeft: 8, marginTop: 2 }}>{item.name}</Text>
+
+                                </View>
+                                <Text style={{ fontSize: 14, color: 'black', opacity: 0.7, fontFamily: 'Poppins-Regular', marginRight: 20 }}>3 Requests</Text>
 
                             </View>
-                            <Text style={{ fontSize: 14, color: 'black', opacity: 0.7, fontFamily: 'Poppins-Regular', marginRight:20 }}>{item.request}</Text>
+                        </TouchableOpacity>
+                    ))}
+                </ScrollView>
 
-                        </View>
-                    </TouchableOpacity>
-                ))}
 
 
             </View>

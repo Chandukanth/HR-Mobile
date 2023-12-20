@@ -21,18 +21,22 @@ class apiClient {
       let refresh_token = await AsyncStorage.getItem(
         AsyncStorageConstants.REFRESH_TOKEN
       );
+      console.log('refresh_token', refresh_token);
       let body = {
-        refresh_token,
+        refresh_token: refresh_token,
       };
       const response = await axiosClient.post(REFRESH_URL, body);
+      console.log(response.data);
+      await AsyncStorage.removeItem(AsyncStorageConstants.REFRESH_TOKEN)
       await AsyncStorage.setItem(
         AsyncStorageConstants.REFRESH_TOKEN,
         response.data.refresh_token
       );
+      await AsyncStorage.setItem(AsyncStorageConstants.ACCESS_TOKEN, response.data.access_token)
       return response.data.access_token;
     } catch (error) {
-      console.log(error, ">sessionToken error");
-    
+      console.log(">sessionToken error :", error?.response);
+
     }
   }
 

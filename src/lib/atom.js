@@ -6,18 +6,26 @@ export const isClosingState = atom({
   default: false,
 });
 export const sideMenu = atom({
-    key: 'sideMenu',
-    default: false,
-  });
-  export const CategorySelect = atom({
-    key: 'category',
-    default: false,
-  });
-  export const activeTab = atom({
-    key: 'Tab',
-    default: 0,
-  });
-  export const projectId = atom({
-    key: 'project',
-    default: 0,
-  });
+  key: 'sideMenu',
+  default: false,
+});
+export const CategorySelect = atom({
+  key: 'category',
+  default: false,
+});
+export const activeTab = atom({
+  key: 'Tab',
+  default: 0,
+});
+export const projectId = atom({
+  key: 'project',
+  default: 0,
+});
+export const company = atom({
+  key: 'company',
+  default: []
+})
+export const User = atom({
+  key: 'loggedinuser',
+  default: 0,
+});

@@ -6,17 +6,44 @@ import { Button } from "react-native";
 import BlackButton from "../../components/blackButton";
 import AttendanceService from "../../Services/AttendanceService";
 import { useQuery } from "@tanstack/react-query";
+import LoggedInUserService from "../../Services/LoggedInUserService";
+import { useRecoilState } from "recoil";
+import { User, projectId } from "../../lib/atom";
+import CheckInService from "../../Services/CheckinService";
 
 
 
 const MyAttendance = () => {
     const [attendanceData, setAttendanceData] = useState([])
+    const [loggedInUser, setLoggedInUser] = useRecoilState(User)
+    const [selectedProject, setSelectedProject] = useRecoilState(projectId)
+    const [isLoading, setIsLoading] = useState(false)
+
+
     useEffect(() => {
         getDetails()
     }, [])
     const getDetails = async () => {
+        setIsLoading(true)
+        const user = await LoggedInUserService.get()
+        setLoggedInUser(user)
         const response = await AttendanceService.get();
-        setAttendanceData(response)
+        setAttendanceData(response?.data)
+        const checkin = await CheckInService.get()
+        console.log(checkin, "Checkin");
+        setIsLoading(false)
+
+    }
+
+    const checkIn = async () => {
+        let data = {
+            company: selectedProject,
+            employee: loggedInUser?.id,
+
+        }
+
+        const response = await CheckInService.post(data)
+        console.log(response, ">>>>>>>>");
     }
     const footer = (
         <View style={{ borderTopWidth: 0.5, borderColor: 'lightgrey' }}>
@@ -32,20 +59,16 @@ const MyAttendance = () => {
                     </Text>
                 </View>
             </View>
-            <BlackButton title={'Check out'} />
+            <BlackButton onPress={checkIn} title={'Check out'} />
         </View>
 
 
     )
-
-
-
-
     return (
-        <Layout title={`My Attendance`}>
-            
-                <Calender footer={footer} />
-           
+        <Layout isLoading={isLoading} title={`My Attendance`}>
+
+            <Calender footer={footer} />
+
         </Layout>
     );
 };

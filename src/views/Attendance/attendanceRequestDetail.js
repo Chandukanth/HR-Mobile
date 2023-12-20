@@ -13,6 +13,7 @@ import DateFilter from "../../components/DateFilter";
 import ChattingScreen from "../../components/Ui/chattingScreen";
 import ApprovedButton from "../../components/buttons/ApprovedButton";
 import { screenHeight } from "../../lib/heightwidth";
+import AttendnaceChangeRequestService from "../../Services/AttendanceChangeRequestService";
 
 
 const AttendanceRequestDetail = (props) => {
@@ -25,6 +26,10 @@ const AttendanceRequestDetail = (props) => {
     const toggleDrawer = () => {
         setDrawerVisible(!isDrawerVisible);
     };
+
+    useEffect(() => {
+        getAttendanceChangeRequest()
+    }, [])
 
     useEffect(() => {
         if (isChating) {
@@ -69,7 +74,7 @@ const AttendanceRequestDetail = (props) => {
     const expandItems = (
         <View style={{ alignItems: 'center', paddingTop: 20, width: '100%' }}>
 
-            <View style={[styles.card, {height : screenHeight * 0.46}]}>
+            <View style={[styles.card, { height: screenHeight * 0.46 }]}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 20, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
                     <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>For Date</Text>
                     <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>14 - Dec - 2021</Text>
@@ -91,11 +96,16 @@ const AttendanceRequestDetail = (props) => {
                 <View style={{ borderWidth: 1, borderColor: 'lightgrey', height: 50, borderRadius: 6, width: '90%', marginLeft: 20, marginTop: 20, justifyContent: 'center', alignItems: 'flex-start' }}>
                     <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, marginLeft: 10 }}>Forgot_to_punch</Text>
                 </View>
-                <ApprovedButton width={'90%'}/>
+                <ApprovedButton width={'90%'} />
 
             </View>
         </View>
     )
+
+    const getAttendanceChangeRequest = async () => {
+        let response = await AttendnaceChangeRequestService.get()
+        console.log("🚀 ~ file: manageAttendance.js:199 ~ getAttendanceChansgeRequest ~ response:", response)
+    }
 
     return (
         <Layout title={'Attendance Requests'} backButton={isChating} backPress={() => setIsChating(false)}>

@@ -41,6 +41,11 @@ const AsyncStorageObject = {
 
         }
     },
+    removeItem: async (name) => {
+        if (name) {
+            AsyncStorage.removeItem(name)
+        }
+    },
 
     clearAll: async () => {
         AsyncStorage.clear()

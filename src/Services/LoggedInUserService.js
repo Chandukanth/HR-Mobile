@@ -2,23 +2,23 @@ import { endpoints } from "../helper/ApiendPoints";
 import apiClient from "../ApiClients";
 
 
-class AttendanceService {
+class LoggedInUserService {
 
 
     static async get() {
         try {
 
-            const response = apiClient.get(`${endpoints().AttendanceAPI}`)
+            const response = apiClient.get(`https://auth-7372.qelza.com/me`)
             return (await response).data;
 
         } catch (err) {
             console.log(err);
         }
     }
+   
 
-   
-   
+
 
 }
 
-export default AttendanceService;
+export default LoggedInUserService;

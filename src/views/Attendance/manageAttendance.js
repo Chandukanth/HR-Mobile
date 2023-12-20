@@ -16,6 +16,7 @@ import { screenHeight } from "../../lib/heightwidth";
 import StatusChat from "../../components/Ui/statusChat";
 import ChattingScreen from "../../components/Ui/chattingScreen";
 import ApprovedButton from "../../components/buttons/ApprovedButton";
+import AttendnaceChangeRequestService from "../../Services/AttendanceChangeRequestService";
 
 
 
@@ -24,19 +25,37 @@ const FirstRoute = () => {
     const [isChangeModal, setIsChangeModal] = useState(false);
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [selectedReason, setSelectedReason] = useState(null)
+    const [selectStatus, setSelectStatus] = useState('');
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [selectedReasonItem, setSelectedReasonItem] = useState(null)
+    const [otherReasons, setOtherReasons] = useState("")
 
-    const handlePress = () => {
+    const handlePress = (i) => {
+        if (i) {
+            setSelectedReasonItem(i)
+        }
         setIsPopoverOpen(!isPopoverOpen);
-        setSelectedReason("")
     };
 
-    const toggleChangeModal = () => {
+    const toggleChangeModal = (i) => {
+        if (i) {
+            let data = {
+                changeto: i
+            }
+            setSelectedItem(data)
+        }
+
         setIsChangeModal(!isChangeModal)
     }
 
     const toggleDrawer = () => {
         setDrawerVisible(!isDrawerVisible);
     };
+
+    const selectedStatus = (item) => {
+        setSelectStatus(item)
+        setIsChangeModal(false)
+    }
 
     const changeStatus = [
         { name: 'Present', image: Present },
@@ -45,7 +64,6 @@ const FirstRoute = () => {
         { name: 'Comp Off', image: compOff },
         { name: 'Week Off', image: weekoff },
         { name: 'Holiday', image: notassigned },
-
     ]
 
     const Reason = [
@@ -83,11 +101,11 @@ const FirstRoute = () => {
             </View>
             <ScrollView>
                 <View>
-                    {renderNumberList(toggleChangeModal, handlePress)}
+                    {renderNumberList(toggleChangeModal, handlePress, selectStatus, selectedItem, selectedReason, selectedReasonItem)}
                 </View>
             </ScrollView>
             <View style={{ position: 'absolute', bottom: 10, width: '100%' }}>
-                <BlackButton title={'Submit'} />
+                <BlackButton disabled={selectStatus ? false : true} title={'Submit'} />
 
             </View>
             <DateFilter isDrawerVisible={isDrawerVisible} setDrawerVisible={setDrawerVisible} toggleDrawer={toggleDrawer} />
@@ -97,7 +115,7 @@ const FirstRoute = () => {
                     <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgrey', marginHorizontal: 65, paddingTop: 10 }} />
 
                     {changeStatus.map((item, index) => (
-                        <TouchableOpacity key={index} onPress={toggleChangeModal} style={{ flexDirection: 'row', alignItems: 'center', height: 60, borderBottomWidth: 1, borderBottomColor: 'lightgrey', marginHorizontal: 65, }}>
+                        <TouchableOpacity key={index} onPress={() => selectedStatus(item.image)} style={{ flexDirection: 'row', alignItems: 'center', height: 60, borderBottomWidth: 1, borderBottomColor: 'lightgrey', marginHorizontal: 65, }}>
                             <View style={{ flexDirection: 'row', marginLeft: '28%', alignItems: 'center' }}>
                                 <Image style={{ width: 20, height: 30, objectFit: 'contain', marginRight: 20 }} source={item.image} />
                                 <Text>{item.name}</Text>
@@ -140,6 +158,7 @@ const FirstRoute = () => {
                                         multiline
                                         numberOfLines={10}
                                         placeholder="Write a reason here"
+                                        onChangeText={setOtherReasons}
                                     />
 
                                 </View>
@@ -147,7 +166,7 @@ const FirstRoute = () => {
 
                         </ScrollView>
                         {selectedReason == 'Others' && (
-                            <BlackButton onPress={handlePress} title={'Submit'} />
+                            <BlackButton onPress={() => handlePress("")} title={'Submit'} />
                         )}
                     </View>
                 </BottomSheet>
@@ -173,6 +192,16 @@ const SecondRoute = () => {
             };
         }
     }, [isChating]);
+
+    useEffect(() => {
+        getAttendanceChangeRequest()
+    }, [])
+
+
+    const getAttendanceChangeRequest = async () => {
+        let response = await AttendnaceChangeRequestService.get()
+        console.log("🚀 ~ file: manageAttendance.js:199 ~ getAttendanceChansgeRequest ~ response:", response)
+    }
     const toggleDrawer = () => {
         setDrawerVisible(!isDrawerVisible);
     };
@@ -281,7 +310,8 @@ const SecondRoute = () => {
     );
 }
 
-const renderNumberList = (toggleChangeModal, handlePress) => {
+const renderNumberList = (toggleChangeModal, handlePress, selectStatus, selectedItem, selectedReason, selectedReasonItem) => {
+
     const numberList = [];
     for (let i = 1; i <= 31; i++) {
         // Alternate background color
@@ -289,6 +319,7 @@ const renderNumberList = (toggleChangeModal, handlePress) => {
 
         // Add leading zero if needed
         const formattedNumber = i < 10 ? `0${i}` : `${i}`;
+
 
         numberList.push(
             <View key={i} style={{ width: '100%', backgroundColor, height: 60, }}>
@@ -310,11 +341,21 @@ const renderNumberList = (toggleChangeModal, handlePress) => {
                             <Image style={{ width: 20, height: 20, justifyContent: 'center', alignItems: 'center' }} source={require('../../../assets/days/notassigned.png')} />
 
                     }
-                    <TouchableOpacity onPress={toggleChangeModal} style={{ width: 30, backgroundColor: backgroundColor, opacity: 0.5 }}>
-                        <MaterialCommunityIcons name="chevron-down" size={24} color="black" />
+                    <TouchableOpacity key={i} onPress={() => toggleChangeModal(i)} style={{ width: 30, backgroundColor: backgroundColor, opacity: 0.5 }}>
+                        {selectStatus && selectedItem.changeto == i ? (
+                            <Image style={{ width: 20, height: 20, justifyContent: 'center', alignItems: 'center' }} source={selectStatus} />
+                        ) : (
+                            <MaterialCommunityIcons name="chevron-down" size={24} color="black" />
+
+                        )}
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={handlePress} style={{ backgroundColor: backgroundColor, opacity: 0.5 }}>
-                        <MaterialCommunityIcons name="chevron-down" size={24} color="black" />
+                    <TouchableOpacity onPress={() => handlePress(i)} style={{ backgroundColor: backgroundColor, opacity: 0.5 }}>
+                        {selectedReason && selectedReasonItem == i ? (
+                            <Text style={{ fontFamily: 'Poppins-SemiBold' }}>{selectedReason == 'Out for Work' ? 'OW' : selectedReason == 'Forgot to Punch' ? 'FP' : 'OT'}</Text>
+                        ) : (
+                            <MaterialCommunityIcons name="chevron-down" size={24} color="black" />
+                        )}
+
                     </TouchableOpacity>
                 </View>
             </View>

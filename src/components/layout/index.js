@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Animated } from 'react-native';
+import { View, Text, TouchableOpacity, Animated, ActivityIndicator } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'; // Import the hamburger icon from Expo icons
 import SideMenu from 'react-native-side-menu';
 import SideMenuContent from './sidemenu';
@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { isClosingState, sideMenu } from '../../lib/atom';
 import { useRecoilState } from 'recoil';
 
-const Layout = ({ children, title, noChildren, tabView, backButton, backPress, edgeHitWidth }) => {
+const Layout = ({ children, title, noChildren, tabView, backButton, backPress, edgeHitWidth, isLoading }) => {
     const [isMenuOpen, setMenuOpen] = useRecoilState(sideMenu);
     const [isClosing, setIsClosing] = useRecoilState(isClosingState);
     const [marginTop, setMarginTop] = useState(0)
@@ -77,13 +77,20 @@ const Layout = ({ children, title, noChildren, tabView, backButton, backPress, e
 
                     <Text style={{ fontSize: 20, flex: 1, textAlign: 'center', fontFamily: 'Poppins-SemiBold' }}>{title}</Text>
                 </View>
-
-                {!noChildren && (
-                    <View style={{ flex: 1 }}>
-                        {children}
-                    </View>
+                {isLoading ? (
+                    <ActivityIndicator size="large" color="#000" style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />
+                ) : (
+                    <>
+                        {!noChildren && (
+                            <View style={{ flex: 1 }}>
+                                {children}
+                            </View>
+                        )}
+                        {tabView}
+                    </>
                 )}
-                {tabView}
+
+
 
             </Animated.View>
         </SideMenu>

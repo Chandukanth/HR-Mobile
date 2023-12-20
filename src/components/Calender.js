@@ -27,15 +27,10 @@ const Calender = ({ footer, shift, data }) => {
     const [sideBarOpen, setSideBarOpen] = useState(false)
     const [selectedMonth, setSelectedMonth] = useState(null)
     const [isDrawerVisible, setDrawerVisible] = useState(false);
-    const [isLoading, setIsLoading] = useState(true)
     const toggleDrawer = () => {
         setDrawerVisible(!isDrawerVisible);
     };
-    useEffect(() => {
-        setTimeout(async () => {
-            setIsLoading(false);
-        }, 1000)
-    }, [])
+  
 
     const years = [
         ...Array.from({ length: 2100 - 2012 + 1 }, (_, index) => 2012 + index),
@@ -69,26 +64,19 @@ const Calender = ({ footer, shift, data }) => {
         navigation.navigate("AttendanceDetail", { month })
     }
 
-    if (isLoading) {
-        return (
-            <ActivityIndicator size="large" color="#000" style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />
-        )
-    }
+  
 
 
 
     const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     return (
         <View style={{ flex: 1 }}>
-            {isLoading ? <ActivityIndicator size="large" color="#000" style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />
-                : (
-                    <>
+           
                         <FlatList
                             pagingEnabled
                             showsHorizontalScrollIndicator={true}
                             data={yearMonths}
                             style={{ flex: 0.7 }}
-                            refreshing={setIsLoading}
                             keyExtractor={(item) => item.month}
                             renderItem={({ item }) => (
 
@@ -149,8 +137,7 @@ const Calender = ({ footer, shift, data }) => {
                                 {footer}
                             </View>
                         )}
-                    </>
-                )}
+                  
 
 
 
