@@ -5,16 +5,27 @@ import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import BottomSheet from "../../components/BottomSheet";
 import Avatar from "../../../assets/avatar/avatar.png"
 import UserService from "../../Services/UserService";
+import { useRecoilState } from "recoil";
+import { User, projectId } from "../../lib/atom";
+import { formatDate } from "../../lib/Datetime";
+import AttendanceService from "../../Services/AttendanceService";
+import CheckInService from "../../Services/CheckinService";
 // import ModalSheet from 'react-modal-sheet';
 const TeamAttendance = () => {
     const [visible, setVisible] = useState(false);
     const [selectedName, setSelectedName] = useState("")
     const [users, setUsers] = useState([]);
+    const [attendanceData, setAttendanceData] = useState([])
+    const [loggedInUser, setLoggedInUser] = useRecoilState(User)
+    const [isLoading, setIsLoading] = useState(false)
+    const [checkin, setCheckin] = useState([])
+    console.log("🚀 ~ file: teamAttendance.js:22 ~ TeamAttendance ~ checkin:", checkin)
 
     useEffect(() => {
         if (users.length == 0) {
             getUsers()
         }
+        getDetails()
     }, [])
 
     const openModal = () => {
@@ -26,7 +37,23 @@ const TeamAttendance = () => {
         setUsers(response.data);
     }
 
+    const getDetails = async (item) => {
+        setIsLoading(true)
+       
+        let checkinParams = {
+            employee:item ? item.id : loggedInUser?.id,
+            date: formatDate(new Date())
+        }
+       
+        const response = await AttendanceService.get();
+        setAttendanceData(response?.data)
+        const checkin = await CheckInService.get(checkinParams)
+        setCheckin(checkin.data)
+        setIsLoading(false)
+
+    }
     const userSelect = (item) => {
+        getDetails(item)
         setSelectedName(item.name)
         openModal()
     }
@@ -61,8 +88,8 @@ const TeamAttendance = () => {
         <Layout title={'Team Attendance'}>
             <Calender footer={footer} />
             {visible && (
-                <BottomSheet isModalVisible={visible} setModalVisible={setVisible} toggleModal={openModal} >
-                    <View style={{ paddingTop: 30, margin: 20, flex: 1 }}>
+                <BottomSheet height={500} isModalVisible={visible} setModalVisible={setVisible} toggleModal={openModal} >
+                    <View style={{ paddingTop: 30, margin: 20, flex: 2 }}>
 
                         <Text style={{ fontSize: 16, fontFamily: 'Poppins-SemiBold', color: '#808080' }}>Select Team Member</Text>
                         <ScrollView>

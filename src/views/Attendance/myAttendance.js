@@ -10,6 +10,7 @@ import LoggedInUserService from "../../Services/LoggedInUserService";
 import { useRecoilState } from "recoil";
 import { User, projectId } from "../../lib/atom";
 import CheckInService from "../../Services/CheckinService";
+import { formatDate, getTime } from "../../lib/Datetime";
 
 
 
@@ -18,6 +19,7 @@ const MyAttendance = () => {
     const [loggedInUser, setLoggedInUser] = useRecoilState(User)
     const [selectedProject, setSelectedProject] = useRecoilState(projectId)
     const [isLoading, setIsLoading] = useState(false)
+    const [checkin, setCheckin] = useState([])
 
 
     useEffect(() => {
@@ -26,11 +28,15 @@ const MyAttendance = () => {
     const getDetails = async () => {
         setIsLoading(true)
         const user = await LoggedInUserService.get()
+        let checkinParams = {
+            employee: user.id,
+            date: formatDate(new Date())
+        }
         setLoggedInUser(user)
         const response = await AttendanceService.get();
         setAttendanceData(response?.data)
-        const checkin = await CheckInService.get()
-        console.log(checkin, "Checkin");
+        const checkin = await CheckInService.get(checkinParams)
+        setCheckin(checkin.data)
         setIsLoading(false)
 
     }
@@ -43,14 +49,16 @@ const MyAttendance = () => {
         }
 
         const response = await CheckInService.post(data)
-        console.log(response, ">>>>>>>>");
+        if (response) {
+            getDetails()
+        }
     }
     const footer = (
         <View style={{ borderTopWidth: 0.5, borderColor: 'lightgrey' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 12, marginLeft: 10, marginRight: 10, justifyContent: 'space-between' }}>
                 <View style={{ width: '48%', borderColor: 'lightgrey', borderWidth: 1, borderRadius: 8, alignItems: 'center', height: 40, justifyContent: 'center' }}>
                     <Text style={{ fontSize: 12, fontFamily: 'Poppins-Light' }}>
-                        Checked in <Text style={{ fontFamily: 'Poppins-SemiBold' }}>- 9:30AM</Text>
+                        Checked in <Text style={{ fontFamily: 'Poppins-SemiBold' }}>-{checkin.length > 0 ? getTime(checkin[0].created_at) : null}</Text>
                     </Text>
                 </View>
                 <View style={{ width: '48%', borderColor: 'lightgrey', borderWidth: 1, borderRadius: 8, alignItems: 'center', height: 40, justifyContent: 'center' }}>
@@ -59,7 +67,7 @@ const MyAttendance = () => {
                     </Text>
                 </View>
             </View>
-            <BlackButton onPress={checkIn} title={'Check out'} />
+            <BlackButton disabled={checkin.length > 0} onPress={checkIn} title={checkin.length > 0 ? 'Check out' : 'Check in'} />
         </View>
 
 

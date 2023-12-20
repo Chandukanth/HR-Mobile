@@ -89,7 +89,7 @@ const AttendanceRequest = () => {
                 <TouchableOpacity onPress={toggleDrawer} style={{ width: '100%', height: 50, backgroundColor: '#fff', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 5 }}>
                     <View style={{ flexDirection: 'row', opacity: 1, alignItems: 'center', marginLeft: 20 }}>
                         <MaterialCommunityIcons name="calendar-outline" size={24} color="black" />
-                        <Text style={{ paddingLeft: 20, fontFamily: 'Poppins-Light' }}>Dec 2019</Text>
+                        <Text style={{ paddingLeft: 20, fontFamily: 'Poppins-Light' }}>Dec 2023</Text>
                     </View>
                     <View style={{ opacity: 1, alignItems: 'center', marginRight: 20 }}>
                         <Foundation name="filter" size={24} color="black" />
@@ -106,7 +106,7 @@ const AttendanceRequest = () => {
                 </View>
                 <ScrollView>
                     {userList && userList.length > 0 && userList.map((item, index) => (
-                        <TouchableOpacity onPress={() => navigation.navigate('AttendanceRequestDetail', { name: item.name })} key={index} style={{ width: '100%', height: 60, backgroundColor: '#fff', marginTop: 10, justifyContent: 'center' }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('AttendanceRequestDetail', { name: item.name, id: item.id })} key={index} style={{ width: '100%', height: 60, backgroundColor: '#fff', marginTop: 10, justifyContent: 'center' }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 15, marginVertical: 10, alignItems: 'center' }}>
                                 <View style={{ flexDirection: 'row' }}>
                                     <Image source={Avatar} style={{ width: 25, height: 25 }} />

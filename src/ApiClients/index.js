@@ -21,12 +21,10 @@ class apiClient {
       let refresh_token = await AsyncStorage.getItem(
         AsyncStorageConstants.REFRESH_TOKEN
       );
-      console.log('refresh_token', refresh_token);
       let body = {
         refresh_token: refresh_token,
       };
       const response = await axiosClient.post(REFRESH_URL, body);
-      console.log(response.data);
       await AsyncStorage.removeItem(AsyncStorageConstants.REFRESH_TOKEN)
       await AsyncStorage.setItem(
         AsyncStorageConstants.REFRESH_TOKEN,
@@ -35,7 +33,7 @@ class apiClient {
       await AsyncStorage.setItem(AsyncStorageConstants.ACCESS_TOKEN, response.data.access_token)
       return response.data.access_token;
     } catch (error) {
-      console.log(">sessionToken error :", error?.response);
+      console.log(">sessionToken error :", error);
 
     }
   }
@@ -57,6 +55,7 @@ class apiClient {
   static async get(url) {
     try {
       let sessionToken = await this.getSessionToken();
+
       axiosClient.defaults.headers.common["Authorization"] = `Bearer ${sessionToken}`;
 
       const response = await axiosClient.get(url);
