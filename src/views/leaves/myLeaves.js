@@ -1,24 +1,28 @@
 import { Foundation, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { BackHandler, Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { BackHandler, Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useRecoilState } from "recoil";
 import Avatar from "../../../assets/avatar/avatar2.png";
 import Chat from "../../../assets/new.png";
 import DateFilter from "../../components/DateFilter";
 import BlackButton from "../../components/blackButton";
 import Layout from "../../components/layout";
-import { isClosingState } from "../../lib/atom";
+import { User, isClosingState } from "../../lib/atom";
 import ApprovedButton from "../../components/buttons/ApprovedButton";
 import ChatButton from "../../components/buttons/ChatButton";
 import StatusChat from "../../components/Ui/statusChat";
 import ChattingScreen from "../../components/Ui/chattingScreen";
 import { useNavigation } from "@react-navigation/core";
 import { screenHeight } from "../../lib/heightwidth";
+import LeaveRequestService from "../../Services/LeaveRequestService";
+import { formatDate } from "../../lib/Datetime";
 
 const MyLeaves = () => {
     const [isClosing, setIsClosing] = useRecoilState(isClosingState);
+    const [loggedInUser, setLoggedInUser] = useRecoilState(User)
     const [isDrawerVisible, setDrawerVisible] = useState(false);
     const [isChating, setIsChating] = useState(false)
+    const [leaveData, setLeaveData] = useState([])
     const [typing, setTyping] = useState(false)
     const [isCollapsed, setCollapsed] = useState(false)
     const [expand, setExpand] = useState(false)
@@ -29,6 +33,9 @@ const MyLeaves = () => {
     const toggleCollapse = () => {
         setCollapsed(!isCollapsed);
     };
+    useEffect(() => {
+        getLeaveRequest()
+    }, [])
     useEffect(() => {
         if (isChating) {
             const backAction = () => {
@@ -43,6 +50,14 @@ const MyLeaves = () => {
             };
         }
     }, [isChating]);
+
+    const getLeaveRequest = async () => {
+        let data = {
+            employee: loggedInUser?.id
+        }
+        let response = await LeaveRequestService.get(data)
+        setLeaveData(response.data)
+    }
 
     const handleTextChange = (text) => {
         setTyping(text.length > 0);
@@ -119,37 +134,42 @@ const MyLeaves = () => {
 
                             </View>
                         </TouchableOpacity>
-                        <View style={{ alignItems: 'center', paddingTop: 20 }}>
+                        <ScrollView>
+                            <View style={{ alignItems: 'center', paddingTop: 20 }}>
+                                {leaveData && leaveData.length > 0 && leaveData.map((item, index) => (
+                                    <View key={index} style={[styles.card, { elevation: isClosing ? 0 : 5, marginBottom: 20 }]}>
+                                        <View style={{ marginTop: 3 }}>
+                                            <View style={styles.item}>
+                                                <Text style={styles.itemText}>Applied</Text>
+                                                <Text style={styles.itemText}>{formatDate(new Date(item?.created_at))}</Text>
+                                            </View>
+                                            <View style={styles.item}>
+                                                <Text style={styles.itemText}>From</Text>
+                                                <Text style={styles.itemText}>{item?.from_date}</Text>
+                                            </View>
+                                            <View style={styles.item}>
+                                                <Text style={styles.itemText}>To </Text>
+                                                <Text style={styles.itemText}>{item?.to_date}</Text>
+                                            </View>
+                                            <View style={styles.item}>
+                                                <Text style={styles.itemText}>Leave type </Text>
+                                                <Text style={styles.itemText}>Casual</Text>
+                                            </View>
+                                            <View style={{ marginLeft: 20, paddingTop: 20, }}>
+                                                <Text style={styles.itemText}>Reason</Text>
 
-                            <View style={[styles.card, { elevation: isClosing ? 0 : 5 }]}>
-                                <View style={{ marginTop: 3 }}>
-                                    <View style={styles.item}>
-                                        <Text style={styles.itemText}>Applied</Text>
-                                        <Text style={styles.itemText}>14 - Dec - 2021</Text>
+                                            </View>
+                                            <View style={{ borderWidth: 1, borderColor: 'lightgrey', height: 50, borderRadius: 6, width: '90%', marginLeft: 20, marginTop: 20, justifyContent: 'center', alignItems: 'flex-start' }}>
+                                                <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, marginLeft: 10 }}>{item?.reason}</Text>
+                                            </View>
+                                            <StatusChat setIsChating={setIsChating} />
+                                        </View>
                                     </View>
-                                    <View style={styles.item}>
-                                        <Text style={styles.itemText}>From</Text>
-                                        <Text style={styles.itemText}>14 - Nov - 2021</Text>
-                                    </View>
-                                    <View style={styles.item}>
-                                        <Text style={styles.itemText}>To </Text>
-                                        <Text style={styles.itemText}>18 - Nov - 2021</Text>
-                                    </View>
-                                    <View style={styles.item}>
-                                        <Text style={styles.itemText}>Leave type </Text>
-                                        <Text style={styles.itemText}>Casual</Text>
-                                    </View>
-                                    <View style={{ marginLeft: 20, paddingTop: 20, }}>
-                                        <Text style={styles.itemText}>Reason</Text>
+                                ))}
 
-                                    </View>
-                                    <View style={{ borderWidth: 1, borderColor: 'lightgrey', height: 50, borderRadius: 6, width: '90%', marginLeft: 20, marginTop: 20, justifyContent: 'center', alignItems: 'flex-start' }}>
-                                        <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, marginLeft: 10 }}>Casual Leave</Text>
-                                    </View>
-                                    <StatusChat setIsChating={setIsChating} />
-                                </View>
                             </View>
-                        </View>
+                        </ScrollView>
+
                         {isDrawerVisible && (
                             <DateFilter isDrawerVisible={isDrawerVisible} setDrawerVisible={setDrawerVisible} toggleDrawer={toggleDrawer} />
                         )}

@@ -66,6 +66,20 @@ class apiClient {
     }
   }
 
+  static async patch(url, body) {
+    try {
+      let sessionToken = await this.getSessionToken();
+      axiosClient.defaults.headers.common["Authorization"] = `Bearer ${sessionToken}`;
+
+      const response = await axiosClient.patch(url, body);
+
+      return response;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   static async put(url, body) {
     try {
       let sessionToken = await this.getSessionToken();
