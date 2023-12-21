@@ -20,6 +20,7 @@ const MyAttendance = () => {
     const [selectedProject, setSelectedProject] = useRecoilState(projectId)
     const [isLoading, setIsLoading] = useState(false)
     const [checkin, setCheckin] = useState([])
+    const [checkedIn, setCheckedIn] = useState(false)
 
 
     useEffect(() => {
@@ -33,7 +34,10 @@ const MyAttendance = () => {
             timestamp__date: formatDate(new Date())
         }
         setLoggedInUser(user)
-        const response = await AttendanceService.get();
+        let myAttendanceParams = {
+            employee: user.id,
+        }
+        const response = await AttendanceService.get(myAttendanceParams);
         setAttendanceData(response?.data)
         const checkin = await CheckInService.get(checkinParams)
         setCheckin(checkin.data)
@@ -43,10 +47,11 @@ const MyAttendance = () => {
 
     const checkIn = async () => {
         let data = {
-            company: selectedProject,
+            company: selectedProject ? selectedProject : 1,
             employee: loggedInUser?.id,
         }
         const response = await CheckInService.post(data)
+        setCheckedIn(!checkedIn)
         if (response) {
             getDetails()
         }
@@ -65,7 +70,7 @@ const MyAttendance = () => {
                     </Text>
                 </View>
             </View>
-            <BlackButton disabled={checkin.length > 0} onPress={checkIn} title={checkin.length > 0 ? 'Check out' : 'Check in'} />
+            <BlackButton onPress={checkIn} title={checkedIn && checkin.length > 0 ? 'Check out' : 'Check in'} />
         </View>
 
 
