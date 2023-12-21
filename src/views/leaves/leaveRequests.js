@@ -12,6 +12,7 @@ import { screenHeight } from "../../lib/heightwidth";
 import LeaveRequestService from "../../Services/LeaveRequestService";
 import { formatDate } from "../../lib/Datetime";
 import ApprovedButton from "../../components/buttons/ApprovedButton";
+import RejectedButton from "../../components/buttons/RejectedButton";
 
 const LeaveRequest = () => {
     const [isDrawerVisible, setDrawerVisible] = useState(false);
@@ -170,7 +171,7 @@ const LeaveRequest = () => {
                                             <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, marginLeft: 10 }}>{item?.reason}</Text>
                                         </View>
 
-                                        <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', marginLeft:item.status == 0 ? 20 : 0, marginTop: 10 }}>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', marginLeft: item.status == 0 ? 20 : 0, marginTop: 10 }}>
                                             {item.status == 0 ? (
                                                 <>
                                                     <View style={{ width: '34%', marginTop: 10 }}>
@@ -181,7 +182,13 @@ const LeaveRequest = () => {
                                                     </View>
                                                 </>
                                             ) : (
-                                                <ApprovedButton />
+                                                <>
+                                                    {item.status == 2 ? (
+                                                        <RejectedButton />
+                                                    ) : <ApprovedButton />}
+                                                </>
+
+
                                             )}
 
                                             <TouchableOpacity onPress={() => setIsChating(true)} style={{ height: 40, justifyContent: 'center', alignItems: 'center', marginRight: 10, marginTop: 10, width: 40, backgroundColor: '#f7f7f7', borderRadius: 8, marginLeft: 10 }}>

@@ -127,7 +127,7 @@ const MyLeaves = () => {
                         <TouchableOpacity onPress={toggleDrawer} style={{ width: '100%', height: 50, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 5 }}>
                             <View style={{ flexDirection: 'row', opacity: 1, alignItems: 'center', marginLeft: 20 }}>
                                 <MaterialCommunityIcons name="calendar-outline" size={24} color="black" />
-                                <Text style={{ paddingLeft: 20, fontFamily: 'Poppins-Light' }}>Dec 2021</Text>
+                                <Text style={{ paddingLeft: 20, fontFamily: 'Poppins-Light' }}>Dec 2023</Text>
                             </View>
                             <View style={{ opacity: 1, alignItems: 'center', marginRight: 20 }}>
                                 <Foundation name="filter" size={24} color="black" />
@@ -162,7 +162,7 @@ const MyLeaves = () => {
                                             <View style={{ borderWidth: 1, borderColor: 'lightgrey', height: 50, borderRadius: 6, width: '90%', marginLeft: 20, marginTop: 20, justifyContent: 'center', alignItems: 'flex-start' }}>
                                                 <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, marginLeft: 10 }}>{item?.reason}</Text>
                                             </View>
-                                            <StatusChat setIsChating={setIsChating} />
+                                            <StatusChat rejected={item.status == 2} setIsChating={setIsChating} />
                                         </View>
                                     </View>
                                 ))}
