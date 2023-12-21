@@ -30,7 +30,7 @@ const AttendanceDetail = (props) => {
     ]
 
     const attendance = [
-        { name: 'Attendance Status', image: Present },
+        { name: 'Attendance Status', image: params?.image ? params?.image : notassigned },
         { name: 'Checkin Time', number: '9:00 AM' },
         { name: 'Checkout Time', number: '4:00 PM' },
         { name: 'Location', number: 'MG Road' },
@@ -44,9 +44,9 @@ const AttendanceDetail = (props) => {
                     <>
                         <View style={{ alignItems: 'center', flex: 0.4 }}>
                             <View style={{ width: 200, backgroundColor: '#fff', borderRadius: screenWidth, height: 200, justifyContent: 'flex-end', alignItems: 'center' }}>
-                                <Image style={{ objectFit: 'cover', width:150, height : 150, marginBottom : 10 }} source={Avatar} />
+                                <Image style={{ objectFit: 'cover', width: 150, height: 150, marginBottom: 10 }} source={Avatar} />
                             </View>
-                            <Text style={{fontFamily : 'Poppins-Bold',  marginTop : 20, }}>Chandu K Yadav</Text>
+                            <Text style={{ fontFamily: 'Poppins-Bold', marginTop: 20, }}>Chandu K Yadav</Text>
 
                         </View>
                         <View style={{ flex: 0.5 }}>

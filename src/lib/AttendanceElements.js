@@ -19,7 +19,7 @@ export const generateAttendanceElement = (value) => {
     case 5:
       image = weekoff;
       break;
-    case 0:
+    case '0':
       image = absent;
       break;
     case 4:

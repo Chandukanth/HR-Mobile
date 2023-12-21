@@ -30,7 +30,7 @@ const MyAttendance = () => {
         const user = await LoggedInUserService.get()
         let checkinParams = {
             employee: user.id,
-            date: formatDate(new Date())
+            timestamp__date: formatDate(new Date())
         }
         setLoggedInUser(user)
         const response = await AttendanceService.get();
@@ -45,9 +45,7 @@ const MyAttendance = () => {
         let data = {
             company: selectedProject,
             employee: loggedInUser?.id,
-
         }
-
         const response = await CheckInService.post(data)
         if (response) {
             getDetails()
@@ -75,7 +73,7 @@ const MyAttendance = () => {
     return (
         <Layout isLoading={isLoading} title={`My Attendance`}>
 
-            <Calender footer={footer} />
+            <Calender attendanceList={attendanceData} footer={footer} />
 
         </Layout>
     );
