@@ -8,12 +8,17 @@ import DateFilter from "../../components/DateFilter";
 import StatusChat from "../../components/Ui/statusChat";
 import ChattingScreen from "../../components/Ui/chattingScreen";
 import ApprovedButton from "../../components/buttons/ApprovedButton";
+import ShiftChangeRequestService from "../../Services/ShiftChangeRequestService";
+import { useRecoilState } from "recoil";
+import { User } from "../../lib/atom";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const ChangeShift = () => {
     const [isDrawerVisible, setDrawerVisible] = useState(false);
     const [isChating, setIsChating] = useState(false)
+    const [currentUser, setCurrentUser] = useRecoilState(User)
+    const [shiftData, setShiftData] = useState([])
     const toggleDrawer = () => {
         setDrawerVisible(!isDrawerVisible);
     };
@@ -32,6 +37,18 @@ const ChangeShift = () => {
         }
 
     }, [isChating]);
+
+    useEffect(() => {
+        getShiftApplications()
+    }, [])
+
+    const getShiftApplications = async () => {
+        let params = {
+            employee: currentUser?.id
+        }
+        let response = await ShiftChangeRequestService.get(params)
+        setShiftData(response.data)
+    }
 
     const shortItems = (
         <View style={[styles.card, { height: 170 }]}>
@@ -102,45 +119,50 @@ const ChangeShift = () => {
                         {isDrawerVisible && (
                             <DateFilter isDrawerVisible={isDrawerVisible} setDrawerVisible={setDrawerVisible} toggleDrawer={toggleDrawer} />
                         )}
-                        <View style={{ backgroundColor: '#f7f7f7' }}>
+                        <ScrollView>
+                            <View style={{ backgroundColor: '#f7f7f7' }}>
 
-                            <View style={{ alignItems: 'center', paddingTop: 20 }}>
+                                <View style={{ alignItems: 'center', paddingTop: 20 }}>
+                                    {shiftData && shiftData.length > 0 && shiftData.map((item, index) => (
+                                        <View key={index} style={styles.card}>
+                                            <View style={{ marginTop: 6 }}>
+                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 10, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
+                                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Applied on</Text>
+                                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>{item?.from_date}</Text>
+                                                </View>
+                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 10, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
+                                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>From Date</Text>
+                                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>{item?.from_date}</Text>
+                                                </View>
+                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 10, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
+                                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>To Date</Text>
+                                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>{item?.to_date}</Text>
+                                                </View>
+                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 10, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
+                                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>New Shift</Text>
+                                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Regular Shift</Text>
+                                                </View>
+                                                <View style={{ marginLeft: 20, paddingTop: 10, }}>
+                                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Reason</Text>
 
-                                <View style={styles.card}>
-                                    <View style={{marginTop : 6}}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 10, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
-                                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Applied on</Text>
-                                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>14 - Dec - 2021</Text>
-                                        </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 10, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
-                                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>From Date</Text>
-                                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>14 - Nov - 2021</Text>
-                                        </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 10, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
-                                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>To Date</Text>
-                                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>18 - Nov - 2021</Text>
-                                        </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 10, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
-                                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>New Shift</Text>
-                                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Casual</Text>
-                                        </View>
-                                        <View style={{ marginLeft: 20, paddingTop: 10, }}>
-                                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Reason</Text>
+                                                </View>
+                                                <View style={{ borderWidth: 1, borderColor: 'lightgrey', height: 50, borderRadius: 6, width: '90%', marginLeft: 20, marginTop: 20, justifyContent: 'center', alignItems: 'flex-start' }}>
+                                                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, marginLeft: 10 }}>{item?.reason}</Text>
+                                                </View>
+                                                <StatusChat setIsChating={setIsChating} />
+                                            </View>
+
 
                                         </View>
-                                        <View style={{ borderWidth: 1, borderColor: 'lightgrey', height: 50, borderRadius: 6, width: '90%', marginLeft: 20, marginTop: 20, justifyContent: 'center', alignItems: 'flex-start' }}>
-                                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, marginLeft: 10 }}>Reason</Text>
-                                        </View>
-                                        <StatusChat setIsChating={setIsChating} />
-                                    </View>
-
+                                    ))}
 
                                 </View>
                             </View>
-                        </View>
+                        </ScrollView>
+
 
                     </View>
-                    <View style={{ flex: 0.13, backgroundColor:'#f7f7f7' }}>
+                    <View style={{ flex: 0.13, backgroundColor: '#f7f7f7' }}>
                         <View style={{ position: 'absolute', bottom: 18, width: '95%', justifyContent: 'center', left: 5 }}>
                             <BlackButton title={'Change Shift'} />
                         </View>
@@ -160,6 +182,6 @@ const styles = StyleSheet.create({
         width: '85%',
         borderRadius: 12,
         elevation: 5,
-
+        marginBottom: 20
     }
 })

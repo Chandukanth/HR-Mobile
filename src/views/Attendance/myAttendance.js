@@ -70,7 +70,7 @@ const MyAttendance = () => {
                     </Text>
                 </View>
             </View>
-            <BlackButton onPress={checkIn} title={checkedIn && checkin.length > 0 ? 'Check out' : 'Check in'} />
+            <BlackButton onPress={checkIn} title={ checkin.length > 0 ? 'Check out' : 'Check in'} />
         </View>
 
 

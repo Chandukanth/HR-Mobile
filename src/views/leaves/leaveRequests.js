@@ -130,7 +130,7 @@ const LeaveRequest = () => {
                     <TouchableOpacity onPress={toggleDrawer} style={{ width: '100%', height: 50, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 5 }}>
                         <View style={{ flexDirection: 'row', opacity: 1, alignItems: 'center', marginLeft: 20 }}>
                             <MaterialCommunityIcons name="calendar-outline" size={24} color="black" />
-                            <Text style={{ paddingLeft: 20, fontFamily: 'Poppins-Light' }}>Dec 2021</Text>
+                            <Text style={{ paddingLeft: 20, fontFamily: 'Poppins-Light' }}>Dec 2023</Text>
                         </View>
                         <View style={{ opacity: 1, alignItems: 'center', marginRight: 20 }}>
                             <Foundation name="filter" size={24} color="black" />

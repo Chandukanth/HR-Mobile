@@ -1,4 +1,5 @@
 export const formatDate = (date) => {
+    console.log("🚀 ~ file: Datetime.js:2 ~ formatDate ~ date:", date)
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
     const day = String(date.getDate()).padStart(2, '0');
@@ -12,7 +13,7 @@ export const getTime = (time) => {
     const timeOptions = {
         hour: 'numeric',
         minute: 'numeric',
-        hour12: true, // Set to true to display in AM/PM format
+        hour12: true,
     };
 
     const formattedTime = new Intl.DateTimeFormat('en-US', timeOptions).format(dateObject);
