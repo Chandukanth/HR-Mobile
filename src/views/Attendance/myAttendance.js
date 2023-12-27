@@ -46,11 +46,19 @@ const MyAttendance = () => {
     }
 
     const checkIn = async () => {
+        let status
+        if (checkin.length > 0) {
+            status = 1
+        } else {
+            status = '0'
+        }
         let data = {
             company: selectedProject ? selectedProject : 1,
             employee: loggedInUser?.id,
+            status: status
         }
         const response = await CheckInService.post(data)
+        console.log("🚀 ~ file: myAttendance.js:54 ~ checkIn ~ response:", response)
         setCheckedIn(!checkedIn)
         if (response) {
             getDetails()
@@ -70,7 +78,16 @@ const MyAttendance = () => {
                     </Text>
                 </View>
             </View>
-            <BlackButton onPress={checkIn} title={ checkin.length > 0 ? 'Check out' : 'Check in'} />
+            {checkin[1]?.status !== 1 ? (
+                <BlackButton onPress={checkIn} title={checkin.length > 0 ? 'Check out' : 'Check in'} />
+            ) : (
+                <View style={{ width: '100%', borderColor: 'lightgrey', borderWidth: 1, borderRadius: 8, alignItems: 'center', height: 40, justifyContent: 'center' }}>
+
+                    <Text style={{ fontSize: 12, fontFamily: 'Poppins-Light' }}>
+                        Checked out <Text style={{ fontFamily: 'Poppins-SemiBold' }}>-{checkin.length > 0 ? getTime(checkin[0].timestamp) : null}</Text>
+                    </Text>
+                </View>
+            )}
         </View>
 
 

@@ -20,8 +20,11 @@ import AttendnaceChangeRequestService from "../../Services/AttendanceChangeReque
 import AttendanceService from "../../Services/AttendanceService";
 import { useRecoilState } from "recoil";
 import { User, activeTab, company } from "../../lib/atom";
-import { AttendanceChangeRequestReasonChoices, attendanceId, generateAttendanceElement } from "../../lib/AttendanceElements";
-import { formatDate } from "../../lib/Datetime";
+import { AttendanceChangeRequestReasonChoices, ReverseAttendanceChangeRequestReasonChoices, attendanceId, generateAttendanceElement } from "../../lib/AttendanceElements";
+import { formatDate, getCurrentMonthEndDate, getCurrentMonthStartDate, getMonthNumber } from "../../lib/Datetime";
+import RejectedButton from "../../components/buttons/RejectedButton";
+import PendingButton from "../../components/buttons/PendingButton";
+import ChatButton from "../../components/buttons/ChatButton";
 
 
 
@@ -39,10 +42,12 @@ const FirstRoute = () => {
     const [companyId, setCompanyId] = useRecoilState(company);
     const [currentStatus, setCurrentStatus] = useState(null)
     const [index, setIndex] = useRecoilState(activeTab);
+    const [year, setYear] = useState("")
+    const [month, setMonth] = useState("")
 
     useEffect(() => {
         getAttendanceList()
-    }, [])
+    }, [year])
 
     const handlePress = (i) => {
         if (i) {
@@ -79,7 +84,7 @@ const FirstRoute = () => {
         // Format the date if needed
         const formattedStartDate = `${currentMonthStartDate.getFullYear()}-${(currentMonthStartDate.getMonth() + 1).toString().padStart(2, '0')}-${currentMonthStartDate.getDate().toString().padStart(2, '0')}`;
         let data = {
-            timestamp__date: formattedStartDate,
+            timestamp__date_gte: year ? `${year}-${getMonthNumber(month)}-01` : formattedStartDate,
             employee: selecteduser?.id,
         }
         let response = await AttendanceService.get(data);
@@ -134,7 +139,7 @@ const FirstRoute = () => {
             <TouchableOpacity onPress={toggleDrawer} style={{ width: '100%', height: 50, backgroundColor: '#f7f7f7', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <View style={{ flexDirection: 'row', opacity: 1, alignItems: 'center', marginLeft: 20 }}>
                     <MaterialCommunityIcons name="calendar-outline" size={24} color="black" />
-                    <Text style={{ paddingLeft: 20, fontFamily: 'Poppins-Light' }}>Dec 2023</Text>
+                    <Text style={{ paddingLeft: 20, fontFamily: 'Poppins-Light' }}>{month} {year}</Text>
                 </View>
                 <View style={{ opacity: 1, alignItems: 'center', marginRight: 20 }}>
                     <Foundation name="filter" size={24} color="black" />
@@ -165,7 +170,7 @@ const FirstRoute = () => {
                 <BlackButton onPress={SubmitRequest} disabled={selectStatus ? false : true} title={'Submit'} />
 
             </View>
-            <DateFilter isDrawerVisible={isDrawerVisible} setDrawerVisible={setDrawerVisible} toggleDrawer={toggleDrawer} />
+            <DateFilter setMonth={setMonth} setYear={setYear} isDrawerVisible={isDrawerVisible} setDrawerVisible={setDrawerVisible} toggleDrawer={toggleDrawer} />
             {isChangeModal && (
                 <BottomSheet isModalVisible={isChangeModal} setModalVisible={setIsChangeModal} toggleModal={toggleChangeModal}>
                     <Text style={{ textAlign: 'center', fontFamily: 'Poppins-SemiBold', fontSize: 16, paddingTop: 20 }}>Change to</Text>
@@ -237,7 +242,11 @@ const SecondRoute = () => {
     const [isChating, setIsChating] = useState(false)
     const [index, setIndex] = useRecoilState(activeTab);
     const [attendanceDetails, setAttendanceDetails] = useState([])
-    const [selecteduser, setSelectedUser] = useRecoilState(User)
+    const [selecteduser, setSelectedUser] = useRecoilState(User);
+    const [fromDate, setFromDate] = useState(getCurrentMonthStartDate())
+    console.log("🚀 ~ file: manageAttendance.js:245 ~ SecondRoute ~ fromDate:", fromDate)
+    const [toDate, setToDate] = useState(getCurrentMonthEndDate())
+    console.log("🚀 ~ file: manageAttendance.js:247 ~ SecondRoute ~ toDate:", toDate)
 
 
     useEffect(() => {
@@ -318,7 +327,8 @@ const SecondRoute = () => {
 
     const getAttendanceChangeRequest = async () => {
         let params = {
-            employee: selecteduser?.id
+            employee: selecteduser?.id,
+            // from_date : fromDate,
         }
         let response = await AttendnaceChangeRequestService.get(params)
         setAttendanceDetails(response.data)
@@ -346,29 +356,40 @@ const SecondRoute = () => {
                                 <View key={index} style={[styles.card, { marginBottom: 10 }]}>
                                     <View style={{ marginTop: 3 }}>
                                         <View style={styles.item}>
-                                            <Text style={styles.itemText}>Applied</Text>
-                                            <Text style={styles.itemText}>{formatDate(new Date(item.created_at))}</Text>
-                                        </View>
-                                        <View style={styles.item}>
-                                            <Text style={styles.itemText}>From</Text>
-                                            <Text style={styles.itemText}>{item?.from_date}</Text>
-                                        </View>
-                                        <View style={styles.item}>
-                                            <Text style={styles.itemText}>To </Text>
+                                            <Text style={styles.itemText}>For date</Text>
                                             <Text style={styles.itemText}>{item?.to_date}</Text>
                                         </View>
                                         <View style={styles.item}>
-                                            <Text style={styles.itemText}>Leave type </Text>
-                                            <Text style={styles.itemText}>Casual</Text>
+                                            <Text style={styles.itemText}>Current status</Text>
+                                            <Image style={{ width: 20, height: 20 }} source={generateAttendanceElement(item?.from_status)} />
                                         </View>
+                                        <View style={styles.item}>
+                                            <Text style={styles.itemText}>Change to </Text>
+                                            <Image style={{ width: 20, height: 20 }} source={generateAttendanceElement(item?.to_status == 0 ? item?.to_status.toString() : item?.to_status)} />
+                                        </View>
+
                                         <View style={{ marginLeft: 20, paddingTop: 20, }}>
                                             <Text style={styles.itemText}>Reason</Text>
 
                                         </View>
                                         <View style={{ borderWidth: 1, borderColor: 'lightgrey', height: 50, borderRadius: 6, width: '90%', marginLeft: 20, marginTop: 20, justifyContent: 'center', alignItems: 'flex-start' }}>
-                                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, marginLeft: 10 }}>Casual Leave</Text>
+                                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, marginLeft: 10 }}>{ReverseAttendanceChangeRequestReasonChoices(item?.reason == 0 ? item?.reason.toString() : item?.reason)}</Text>
                                         </View>
-                                        <StatusChat setIsChating={setIsChating} />
+                                        <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center' }}>
+                                            {item.status == 0 && (
+                                                <PendingButton />
+                                            )}
+
+                                            {item.status == 1 && (
+                                                <ApprovedButton />
+
+                                            )}
+                                            {item.status == 2 && (
+                                                <RejectedButton />
+
+                                            )}
+                                            <ChatButton onPress={() => setIsChating(true)} />
+                                        </View>
                                     </View>
                                 </View>
                             ))}
@@ -418,7 +439,7 @@ const renderNumberList = (toggleChangeModal, handlePress, selectStatus, selected
                         // Default content when no attendance data is found
                         <Image style={{ width: 20, height: 20, justifyContent: 'center', alignItems: 'center' }} source={require('../../../assets/days/notassigned.png')} />
                     )}
-                    <TouchableOpacity key={i} onPress={() => toggleChangeModal(i, dayAttendance?.computed_status.toString())} style={{ width: 30, backgroundColor: backgroundColor, opacity: 0.5 }}>
+                    <TouchableOpacity disabled={dayAttendance ? false : true} key={i} onPress={() => toggleChangeModal(i, dayAttendance?.computed_status.toString())} style={{ width: 30, backgroundColor: backgroundColor, opacity: dayAttendance ? 1 : 0.5 }}>
                         {selectStatus && selectedItem.changeto == i ? (
                             <Image style={{ width: 20, height: 20, justifyContent: 'center', alignItems: 'center' }} source={selectStatus.image} />
                         ) : (
@@ -426,7 +447,7 @@ const renderNumberList = (toggleChangeModal, handlePress, selectStatus, selected
 
                         )}
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handlePress(i)} style={{ backgroundColor: backgroundColor, opacity: 0.5 }}>
+                    <TouchableOpacity disabled={dayAttendance ? false : true} onPress={() => handlePress(i)} style={{ backgroundColor: backgroundColor, opacity: dayAttendance ? 1 : 0.5 }}>
                         {selectedReason && selectedReasonItem == i ? (
                             <Text style={{ fontFamily: 'Poppins-SemiBold' }}>{selectedReason == 'Out for Work' ? 'OW' : selectedReason == 'Forgot to Punch' ? 'FP' : 'OT'}</Text>
                         ) : (
@@ -498,7 +519,7 @@ const styles = StyleSheet.create({
     },
     card: {
         backgroundColor: '#fff',
-        height: 390,
+        height: 345,
         width: '85%',
         borderRadius: 12,
         elevation: 5,

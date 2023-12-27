@@ -7,7 +7,7 @@ import Avatar from "../../../assets/avatar/avatar.png"
 import UserService from "../../Services/UserService";
 import { useRecoilState } from "recoil";
 import { User, projectId } from "../../lib/atom";
-import { formatDate } from "../../lib/Datetime";
+import { formatDate, getTime } from "../../lib/Datetime";
 import AttendanceService from "../../Services/AttendanceService";
 import CheckInService from "../../Services/CheckinService";
 // import ModalSheet from 'react-modal-sheet';
@@ -19,7 +19,6 @@ const TeamAttendance = () => {
     const [loggedInUser, setLoggedInUser] = useRecoilState(User)
     const [isLoading, setIsLoading] = useState(false)
     const [checkin, setCheckin] = useState([])
-    console.log("🚀 ~ file: teamAttendance.js:22 ~ TeamAttendance ~ checkin:", checkin)
 
     useEffect(() => {
         if (users.length == 0) {
@@ -34,7 +33,8 @@ const TeamAttendance = () => {
 
     const getUsers = async () => {
         const response = await UserService.get()
-        setUsers(response.data);
+        let userList = response.data.filter((item)=> item.id !== loggedInUser?.id)
+        setUsers(userList);
     }
 
     const getDetails = async (item) => {
@@ -42,10 +42,14 @@ const TeamAttendance = () => {
        
         let checkinParams = {
             employee:item ? item.id : loggedInUser?.id,
-            date: formatDate(new Date())
+            timestamp__date: formatDate(new Date())
+        }
+
+        let attendnaceParams = {
+            employee:item ? item.id : loggedInUser?.id
         }
        
-        const response = await AttendanceService.get();
+        const response = await AttendanceService.get(attendnaceParams);
         setAttendanceData(response?.data)
         const checkin = await CheckInService.get(checkinParams)
         setCheckin(checkin.data)
@@ -68,7 +72,7 @@ const TeamAttendance = () => {
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 12, marginLeft: 10, marginRight: 10, justifyContent: 'space-between' }}>
                 <View style={{ width: '48%', borderColor: 'lightgrey', borderWidth: 1, borderRadius: 8, alignItems: 'center', height: 40, justifyContent: 'center' }}>
                     <Text style={{ fontSize: 12, fontFamily: 'Poppins-Light' }}>
-                        Checked in <Text style={{ fontFamily: 'Poppins-SemiBold' }}>- 9:30AM</Text>
+                        Checked in <Text style={{ fontFamily: 'Poppins-SemiBold' }}>- {checkin.length > 0 ? getTime(checkin[0].created_at) : null}</Text>
                     </Text>
                 </View>
                 <View style={{ width: '48%', borderColor: 'lightgrey', borderWidth: 1, borderRadius: 8, alignItems: 'center', height: 40, justifyContent: 'center' }}>
@@ -85,8 +89,8 @@ const TeamAttendance = () => {
     )
 
     return (
-        <Layout title={'Team Attendance'}>
-            <Calender footer={footer} />
+        <Layout isLoading={isLoading} title={'Team Attendance'}>
+            <Calender attendanceList={attendanceData}  footer={footer} />
             {visible && (
                 <BottomSheet height={500} isModalVisible={visible} setModalVisible={setVisible} toggleModal={openModal} >
                     <View style={{ paddingTop: 30, margin: 20, flex: 2 }}>

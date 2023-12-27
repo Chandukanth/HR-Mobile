@@ -50,6 +50,15 @@ class AttendnaceChangeRequestService {
             console.log(error.response);
         }
     }
+    static async patch(id, data) {
+        try {
+
+            const response = apiClient.patch(`${endpoints().HrAttendanceChangeRequestApi}${id}/`, data)
+            return (await response).data;
+        } catch (error) {
+            console.log(error?.response);
+        }
+    }
 
 
 

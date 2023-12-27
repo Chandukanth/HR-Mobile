@@ -13,8 +13,9 @@ import claims from "../../../assets/sidebarIcons/claimsIcon.png"
 import { useRoute } from '@react-navigation/core';
 import CompanyService from '../../Services/CompanyService';
 import { useRecoilState } from 'recoil';
-import { company, projectId } from '../../lib/atom';
+import { User, company, projectId } from '../../lib/atom';
 import AsyncStorageObject from '../../lib/AsyncStorage';
+import Avatar from ".././../../assets/avatar/avatar2.png"
 
 
 
@@ -71,6 +72,7 @@ const SubMenu = ({ items, navigation, setMenuOpen }) => {
 const SideMenuContent = ({ navigation, setMenuOpen, setIsClosing }) => {
     const [companyDetail, setCompanyDetail] = useRecoilState(company)
     const [selectedProject, setSelectedProject] = useRecoilState(projectId)
+    const [userName, setUserName] = useRecoilState(User)
     useEffect(() => {
         if (companyDetail.length == 0) {
             getCompanyDetail()
@@ -133,7 +135,12 @@ const SideMenuContent = ({ navigation, setMenuOpen, setIsClosing }) => {
             <View style={{ flexDirection: 'row', flex: 1 }}>
                 {/* First View (20px width) */}
                 <View style={{ width: 40, flexDirection: 'column', justifyContent: 'space-between', marginTop: '20%', marginBottom: '20%', marginLeft: 10 }}>
+
                     <View style={{}}>
+                        <View style={{ width: 40, height: 40, borderRadius: 30, backgroundColor: 'lightgrey', justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
+                            <Image style={{width:30, height : 30, objectFit : 'cover'}} source={Avatar} />
+                            <Text style={{ fontSize: 8, fontWeight: '300', fontFamily: 'Poppins-SemiBold' }}>{userName?.name.substring(0, 2).toUpperCase()}</Text>
+                        </View>
                         {companyDetail.map((item, index) => (
                             <TouchableOpacity onPress={() => {
                                 setSelectedProject(item.id);

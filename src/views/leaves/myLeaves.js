@@ -16,6 +16,8 @@ import { useNavigation } from "@react-navigation/core";
 import { screenHeight } from "../../lib/heightwidth";
 import LeaveRequestService from "../../Services/LeaveRequestService";
 import { formatDate } from "../../lib/Datetime";
+import PendingButton from "../../components/buttons/PendingButton";
+import RejectedButton from "../../components/buttons/RejectedButton";
 
 const MyLeaves = () => {
     const [isClosing, setIsClosing] = useRecoilState(isClosingState);
@@ -162,7 +164,22 @@ const MyLeaves = () => {
                                             <View style={{ borderWidth: 1, borderColor: 'lightgrey', height: 50, borderRadius: 6, width: '90%', marginLeft: 20, marginTop: 20, justifyContent: 'center', alignItems: 'flex-start' }}>
                                                 <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, marginLeft: 10 }}>{item?.reason}</Text>
                                             </View>
-                                            <StatusChat rejected={item.status == 2} setIsChating={setIsChating} />
+                                            <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center' }}>
+                                                {item.status == 0 && (
+                                                    <PendingButton />
+                                                )}
+
+                                                {item.status == 1 && (
+                                                    <ApprovedButton />
+
+                                                )}
+                                                {item.status == 2 && (
+                                                    <RejectedButton />
+
+                                                )}
+                                                <ChatButton onPress={() => setIsChating(true)} />
+                                            </View>
+
                                         </View>
                                     </View>
                                 ))}

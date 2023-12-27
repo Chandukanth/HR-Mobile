@@ -108,13 +108,11 @@ const Calender = ({ footer, shift, data, attendanceList }) => {
         <View style={{ flex: 1 }}>
 
             <FlatList
-                pagingEnabled
-                showsHorizontalScrollIndicator={true}
+               
                 data={yearMonths}
                 style={{ flex: 0.7 }}
                 keyExtractor={(item) => item.month}
-                renderItem={({ item }) => (
-
+                renderItem={({ item, index }) => (
                     <View style={{ flex: footer ? 0.8 : 1, justifyContent: 'center', padding: 10, maxHeight: '100%', backgroundColor: '#fff' }}>
                         {/* Month Name */}
                         <Text onPress={() => detailsSelect(item.month)} style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 18, textAlign: 'center', fontFamily: 'Poppins-SemiBold' }}>{item.month} - <Text onPress={toggleDrawer}>{selectedYear}</Text></Text>
@@ -128,13 +126,11 @@ const Calender = ({ footer, shift, data, attendanceList }) => {
                             ))}
                         </View>
 
-
                         <FlatList
                             data={item.days} // Days of the month
                             keyExtractor={(day) => (day ? day.toString() : 'empty')}
                             renderItem={({ item: day }) => {
                                 const { dayAttendance, status, months } = getAttendanceStatus(item.month, day);
-
 
                                 return (
                                     <TouchableOpacity
@@ -144,34 +140,30 @@ const Calender = ({ footer, shift, data, attendanceList }) => {
                                             justifyContent: 'center',
                                             alignItems: 'center',
                                             margin: 5,
-                                            marginBottom: 20
+                                            marginBottom: 20,
                                         }}
-                                        onPress={() => navigation.navigate("AttendanceDetail", { month: item.month, present: true, day, image: generateAttendanceElement(status) })}
+                                        onPress={() => navigation.navigate("AttendanceDetail", { month: item.month, present: true, day, image: generateAttendanceElement(status), item: dayAttendance })}
                                     >
-
                                         {day !== null && <Text>{day}</Text>}
                                         {status && months == getMonthNumber(item?.month) ? (
                                             <>
-                                                < Image style={{ width: 20, height: 20, marginTop: 3, opacity: 0.5 }} source={generateAttendanceElement(status)} />
+                                                <Image style={{ width: 20, height: 20, marginTop: 3, opacity: 0.5 }} source={generateAttendanceElement(status)} />
                                             </>
                                         ) : (
                                             <>
-                                                {day !== null && < Image style={{ width: 20, height: 20, marginTop: 3, opacity: 0.5 }} source={require("../../assets/days/notassigned.png")} />}
+                                                {day !== null && <Image style={{ width: 20, height: 20, marginTop: 3, opacity: 0.5 }} source={require("../../assets/days/notassigned.png")} />}
                                             </>
                                         )}
-
-
-
-
                                     </TouchableOpacity>
-                                )
+                                );
                             }}
                             numColumns={7} // Number of columns in the calendar
                         />
+                       
                     </View>
-
                 )}
             />
+
             {footer && (
                 <View style={{ backgroundColor: '#fff', flex: 0.23 }}>
                     {footer}

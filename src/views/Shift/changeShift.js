@@ -44,7 +44,9 @@ const ChangeShift = () => {
 
     const getShiftApplications = async () => {
         let params = {
-            employee: currentUser?.id
+            employee: currentUser?.id,
+            from_date__gte : '2023-01-01',
+            to_date__lte : '2023-01-01'
         }
         let response = await ShiftChangeRequestService.get(params)
         setShiftData(response.data)

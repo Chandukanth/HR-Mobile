@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Image } from 'react-native';
@@ -10,11 +10,21 @@ import weekoff from "../../assets/days/weekoff.png"
 import notassigned from "../../assets/days/notassigned.png"
 import Layout from './layout';
 import Avatar from '../../assets/avatar/avatar2.png'
+import { getEmployeeName } from '../lib/getEmployeeName';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const AttendanceDetail = (props) => {
+    const [user, setUser] = useState(null)
+
+    useEffect(() => {
+        getEmployeeName(params?.item?.employee).then((name) => {
+            setUser(name)
+
+        })
+    }, [user])
     let params = props.route.params
+    console.log("🚀 ~ file: attendanceDetail.js:27 ~ AttendanceDetail ~ params:", params)
     const navigation = useNavigation();
     const details = [
         { image: Present, name: "Present", number: 0 },
@@ -40,13 +50,13 @@ const AttendanceDetail = (props) => {
         <Layout backButton title={`My Attendance`}>
             <View style={{ backgroundColor: '#f7f7f7', flex: 1, width: screenWidth }}>
                 <Text style={{ textAlign: 'center', fontFamily: 'Poppins-SemiBold', paddingTop: 20, paddingBottom: 20 }}>{`Attendence Overview - ${params?.day ? params?.day : ''} ${params?.month} 23`}</Text>
-                {params?.present ? (
+                {params?.present && params?.item ? (
                     <>
                         <View style={{ alignItems: 'center', flex: 0.4 }}>
                             <View style={{ width: 200, backgroundColor: '#fff', borderRadius: screenWidth, height: 200, justifyContent: 'flex-end', alignItems: 'center' }}>
                                 <Image style={{ objectFit: 'cover', width: 150, height: 150, marginBottom: 10 }} source={Avatar} />
                             </View>
-                            <Text style={{ fontFamily: 'Poppins-Bold', marginTop: 20, }}>Chandu K Yadav</Text>
+                            <Text style={{ fontFamily: 'Poppins-Bold', marginTop: 20, }}>{user}</Text>
 
                         </View>
                         <View style={{ flex: 0.5 }}>

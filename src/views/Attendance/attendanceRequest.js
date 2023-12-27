@@ -8,12 +8,16 @@ import BottomSheet from "../../components/BottomSheet";
 import { useNavigation } from "@react-navigation/native";
 import Avatar from "../../../assets/avatar/avatar.png"
 import UserService from "../../Services/UserService";
+import { useRecoilState } from "recoil";
+import { User } from "../../lib/atom";
+import AttendnaceChangeRequestService from "../../Services/AttendanceChangeRequestService";
 
 const AttendanceRequest = () => {
     const [isDrawerVisible, setDrawerVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
     const [userList, setUserList] = useState([])
     const navigation = useNavigation()
+    const [loggedInUser, setLoggedInUser] = useRecoilState(User)
 
     useEffect(() => {
         getUserList()
@@ -40,11 +44,28 @@ const AttendanceRequest = () => {
     const getUserList = async () => {
         setIsLoading(true)
         let response = await UserService.get()
-        setUserList(response.data)
-        setIsLoading(false)
+        let userList = response.data.filter((item)=> item.id !== loggedInUser?.id)
 
+        setUserList(userList)
+        setIsLoading(false)
     }
 
+    const getAttendanceRequest = (id) => {
+        let param = {
+          employee: id,
+          // from_date : selectedYear
+        };
+      
+        // Return the promise directly without using await
+        return AttendnaceChangeRequestService.get(param)
+          .then(response => response.data.length)
+          .catch(error => {
+            // Handle errors here if needed
+            console.error('Error in getAttendanceRequest:', error);
+            throw error; // Propagate the error further if necessary
+          });
+      };
+      
     const monthNames = [
         'January', 'February', 'March', 'April',
         'May', 'June', 'July', 'August',

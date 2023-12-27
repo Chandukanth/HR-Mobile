@@ -7,9 +7,10 @@ import BottomSheet from "../../components/BottomSheet";
 import Calendar from "../../../assets/calender.png"
 
 
-const ApplyLeave = () => {
+const ApplyLeave = ({ navigation }) => {
     const [isDrawerVisible, setDrawerVisible] = useState(false);
-    const [isBalanceModal, setIsBalanceModal] = useState(false)
+    const [isBalanceModal, setIsBalanceModal] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(new Date())
     const [open, setOpen] = useState(false)
     const toggleDrawer = () => {
         setDrawerVisible(!isDrawerVisible);
@@ -32,7 +33,7 @@ const ApplyLeave = () => {
 
     return (
         <Layout title={'My Leaves'} backButton>
-            <Picker isDatePickerVisible={open} setDatePickerVisibility={setOpen} />
+            <Picker setDate={setSelectedDate} date={selectedDate} isDatePickerVisible={open} setDatePickerVisibility={setOpen} />
 
             <View style={{ backgroundColor: '#f7f7f7', flex: 1 }}>
                 <Text style={styles.title}>Choose Dates</Text>
@@ -82,7 +83,7 @@ const ApplyLeave = () => {
                         <Text style={styles.blackButtonText}>Submit</Text>
 
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.whiteButton}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.whiteButton}>
                         <Text style={styles.whiteButtonText}>Cancel</Text>
                     </TouchableOpacity>
                 </View>

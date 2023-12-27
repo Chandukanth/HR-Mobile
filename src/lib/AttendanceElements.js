@@ -103,3 +103,48 @@ export const AttendanceChangeRequestReasonChoices = (value) => {
   }
   return Id;
 }
+
+export const ReverseAttendanceChangeRequestReasonChoices = (id) => {
+  let reason;
+
+  switch (id) {
+    case '0':
+      reason = 'Forgot to Punch';
+      break;
+    case 2:
+      reason = 'Out for Work';
+      break;
+    case 3:
+      reason = 'Others';
+      break;
+    default:
+    // Handle default case if needed
+  }
+
+  return reason;
+}
+export const getAttendanceStatusById = (id) => {
+
+  let status;
+
+  switch (id) {
+    case '0':
+      status = 'PENDING';
+      break;
+    case 2:
+      status = 'APPROVED';
+      break;
+    case 3:
+      status = 'REJECTED';
+      break;
+    case 4:
+      status = 'DELETED';
+      break;
+    default:
+    // Handle default case if needed
+  }
+
+  return status;
+
+}
+

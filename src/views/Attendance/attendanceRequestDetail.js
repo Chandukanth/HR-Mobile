@@ -15,13 +15,22 @@ import ApprovedButton from "../../components/buttons/ApprovedButton";
 import { screenHeight } from "../../lib/heightwidth";
 import AttendnaceChangeRequestService from "../../Services/AttendanceChangeRequestService";
 import { attendanceName, generateAttendanceElement } from "../../lib/AttendanceElements";
+import PendingButton from "../../components/buttons/PendingButton";
+import RejectedButton from "../../components/buttons/RejectedButton";
+import ChatButton from "../../components/buttons/ChatButton";
+import { formatDate } from "../../lib/Datetime";
+import RejectButton from "../../components/buttons/RejectButton";
+import ApproveButton from "../../components/buttons/ApproveButton";
 
 
 const AttendanceRequestDetail = (props) => {
     let params = props?.route?.params
     const [isDrawerVisible, setDrawerVisible] = useState(false);
     const [attendanceRequest, setAttendanceRequest] = useState([])
-    console.log("🚀 ~ file: attendanceRequestDetail.js:23 ~ AttendanceRequestDetail ~ attendanceRequest:", attendanceRequest)
+    const [year, setYear] = useState(null)
+    const [month, setMonth] = useState(null)
+    const [selectedYear, setSelectedYear] = useState(formatDate(new Date()))
+    // console.log("🚀 ~ file: attendanceRequestDetail.js:31 ~ AttendanceRequestDetail ~ selectedYear:", selectedYear)
     const navigation = useNavigation()
     const [isChating, setIsChating] = useState(false)
     const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -32,7 +41,18 @@ const AttendanceRequestDetail = (props) => {
 
     useEffect(() => {
         getAttendanceChangeRequest()
-    }, [])
+    }, [selectedYear])
+
+    const submitRequest = async (status, id) => {
+
+        let data = {
+            status: status
+        }
+
+        let response = await AttendnaceChangeRequestService.patch(id, data)
+        getAttendanceChangeRequest()
+
+    }
 
     useEffect(() => {
         if (isChating) {
@@ -107,9 +127,11 @@ const AttendanceRequestDetail = (props) => {
 
     const getAttendanceChangeRequest = async () => {
         let param = {
-            employee: params?.id
+            employee: params?.id,
+            // from_date : selectedYear
         }
         let response = await AttendnaceChangeRequestService.get(param)
+        // console.log("🚀 ~ file: attendanceRequestDetail.js:119 ~ getAttendanceChangeRequest ~ response:", response)
         setAttendanceRequest(response.data)
     }
 
@@ -137,13 +159,13 @@ const AttendanceRequestDetail = (props) => {
                                     </View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 20, paddingTop: 20, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
                                         <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Current Status</Text>
-                                        <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>{attendanceName(item?.from_status.toString())}</Text>
-                                        <Image style={{ width: 25, height: 25, marginRight: 30 }} source={generateAttendanceElement(item?.from_status)} />
+                                        {/* <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>{attendanceName(item?.from_status?.toString())}</Text> */}
+                                        <Image style={{ width: 25, height: 25, marginRight: 30 }} source={generateAttendanceElement(item?.from_status == 0 ? item?.from_status.toString() : item?.from_status)} />
                                     </View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 20, paddingTop: 20, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
                                         <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Change to &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
-                                        <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>{attendanceName(item?.to_status.toString())}</Text>
-                                        <Image style={{ width: 25, height: 25, marginRight: 30 }} source={generateAttendanceElement(item?.to_status)} />
+                                        {/* <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>{attendanceName(item?.to_status?.toString())}</Text> */}
+                                        <Image style={{ width: 25, height: 25, marginRight: 30 }} source={generateAttendanceElement(item?.to_status == 0 ? item?.to_status.toString() : item?.to_status)} />
                                     </View>
                                     <View style={{ marginLeft: 20, paddingTop: 20, }}>
                                         <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Reason</Text>
@@ -152,10 +174,31 @@ const AttendanceRequestDetail = (props) => {
                                     <View style={{ borderWidth: 1, borderColor: 'lightgrey', height: 50, borderRadius: 6, width: '90%', marginLeft: 20, marginTop: 20, justifyContent: 'center', alignItems: 'flex-start' }}>
                                         <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, marginLeft: 10 }}>Forgot_to_punch</Text>
                                     </View>
-                                    <StatusChat setIsChating={setIsChating} />
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', marginLeft: item.status == 0 ? 20 : 0, marginTop: 10 }}>
+                                        {item.status == 0 ? (
+                                            <>
+                                                <View style={{ width: '34%', marginTop: 10 }}>
+                                                    <ApproveButton onPress={() => submitRequest(1, item?.id)} title={'Approve'} />
+                                                </View>
+                                                <View style={{ width: '34%', marginTop: 10, marginLeft: 10 }}>
+                                                    <RejectButton onPress={() => submitRequest(2, item?.id)} title={'Reject'} />
+                                                </View>
+                                            </>
+                                        ) : (
+                                            <>
+                                                {item.status == 2 ? (
+                                                    <RejectedButton />
+                                                ) : <ApprovedButton />}
+                                            </>
+
+
+                                        )}
+
+                                        <ChatButton onPress={() => setIsChating(true)} />
+                                    </View>
 
                                 </View>
-                            )):(
+                            )) : (
                                 <Text>No Record Found</Text>
                             )}
 
@@ -165,7 +208,7 @@ const AttendanceRequestDetail = (props) => {
 
 
                     {isDrawerVisible && (
-                        <DateFilter isDrawerVisible={isDrawerVisible} setDrawerVisible={setDrawerVisible} toggleDrawer={toggleDrawer} />
+                        <DateFilter selectedDate={setSelectedYear} isDrawerVisible={isDrawerVisible} setDrawerVisible={setDrawerVisible} setMonth={setMonth} setYear={setYear} toggleDrawer={toggleDrawer} />
                     )}
                 </View>
             )}
