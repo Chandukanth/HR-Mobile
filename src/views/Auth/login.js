@@ -6,14 +6,32 @@ import { AUTH_URL } from "../../../config";
 import { useToast } from "react-native-toast-notifications";
 import AsyncStorageObject from "../../lib/AsyncStorage";
 import AsyncStorage from "../../helper/AsyncStorage";
+import { useRecoilState } from "recoil";
+import { projectId } from "../../lib/atom";
+import { endpoints } from "../../helper/ApiendPoints";
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [usernameError, setUsernameError] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [isLoading, setIsLoading] = useState(false)
+    const [accessTokenExist, setAccessTokenExist] = React.useState(false)
+    const [companyId, setCompanyId] = useRecoilState(projectId)
     const navigation = useNavigation()
     const toast = useToast();
+    React.useEffect(() => {
+        (async () => {
+            setAccessTokenExist(true)
+            const sessionToken = await AsyncStorageObject.getItem(AsyncStorage.ACCESS_TOKEN)
+            if (sessionToken) {
+
+                navigation.navigate("MyAttendance")
+                setAccessTokenExist(false)
+            } else {
+                setAccessTokenExist(false)
+            }
+        })();
+    }, []);
 
 
     const handleLogin = async () => {
@@ -41,13 +59,21 @@ const Login = () => {
 
         try {
             let body = {
-                username: username.toLowerCase(),
+                username: username,
                 password: password
             }
             axios.post(AUTH_URL, body).then(async (response) => {
                 if (response.data) {
                     await AsyncStorageObject.setItem(AsyncStorage.ACCESS_TOKEN, response.data.access_token)
                     await AsyncStorageObject.setItem(AsyncStorage.REFRESH_TOKEN, response.data.refresh_token)
+                    setCompanyId(1)
+                    navigation.navigate("MyAttendance")
+
+                    let sessionToken = response.data.access_token
+                    axios.defaults.headers.common["Authorization"] = `Bearer ${sessionToken}`;
+                    let company = await axios.get(`${endpoints().CompanyApi}`)
+                    setCompanyId(company.data.data[0].id)
+
                 }
                 toast.show('success ', {
                     type: "success",
@@ -74,50 +100,63 @@ const Login = () => {
             // Make a login request using Axios (replace with your actual API endpoint)
 
         } catch (error) {
+        console.log("🚀 ~ file: login.js:103 ~ handleLogin ~ error:", error)
 
         }
 
     };
 
+
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Login</Text>
+        <>
+            {accessTokenExist ? (
+                <View style={styles.container}>
+                    <Text>Loading....</Text>
+                </View>
+            ) : (
+                <View style={styles.container}>
+                    <Text style={styles.title}>Login</Text>
 
-            <TextInput
-                style={[styles.input, usernameError && styles.inputError]}
-                placeholder="Username"
-                onChangeText={(text) => {
-                    setUsername(text)
-                    if (text.length == 0) {
-                        setUsernameError("Username is required");
-                    } else {
-                        setUsernameError("")
-                    }
-                }}
-                value={username}
-            />
-            {usernameError ? <Text style={styles.errorText}>{usernameError}</Text> : null}
+                    <TextInput
+                        style={[styles.input, usernameError && styles.inputError]}
+                        placeholder="Username"
+                        onChangeText={(text) => {
+                            setUsername(text)
+                            if (text.length == 0) {
+                                setUsernameError("Username is required");
+                            } else {
+                                setUsernameError("")
+                            }
+                        }}
+                        value={username}
+                    />
+                    {usernameError ? <Text style={styles.errorText}>{usernameError}</Text> : null}
 
-            <TextInput
-                style={[styles.input, passwordError && styles.inputError]}
-                placeholder="Password"
-                onChangeText={(text) => {
-                    setPassword(text)
-                    if (text.length == 0) {
-                        setPasswordError("Password is required")
-                    } else {
-                        setPasswordError("")
-                    }
-                }}
-                value={password}
-                secureTextEntry
-            />
-            {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+                    <TextInput
+                        style={[styles.input, passwordError && styles.inputError]}
+                        placeholder="Password"
+                        onChangeText={(text) => {
+                            setPassword(text)
+                            if (text.length == 0) {
+                                setPasswordError("Password is required")
+                            } else {
+                                setPasswordError("")
+                            }
+                        }}
+                        value={password}
+                        secureTextEntry
+                    />
+                    {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
 
-            <TouchableOpacity disabled={isLoading} style={styles.loginButton} onPress={handleLogin}>
-                <Text style={styles.buttonText}> {isLoading ? <ActivityIndicator size="small" color="#fff" /> : 'Login'}</Text>
-            </TouchableOpacity>
-        </View>
+                    <TouchableOpacity disabled={isLoading} style={styles.loginButton} onPress={handleLogin}>
+                        <Text style={styles.buttonText}> {isLoading ? <ActivityIndicator size="small" color="#fff" /> : 'Login'}</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
+
+        </>
+
     );
 };
 

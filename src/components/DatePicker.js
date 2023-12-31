@@ -13,17 +13,16 @@ const DatePicker = ({ isDatePickerVisible, setDatePickerVisibility, setSelectedD
     };
 
     const handleConfirm = (date) => {
-
-        hideDatePicker();
+        setDate && setDate(date)
         const formattedDate = date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
         setSelectedDate && setSelectedDate(formattedDate)
-        setDate && setDate(date)
+        hideDatePicker();
+       
     };
 
     return (
         <View>
             <DateTimePickerModal
-                value={date ? date : new Date()}
                 isVisible={isDatePickerVisible}
                 isDarkModeEnabled={true}
                 mode="date"

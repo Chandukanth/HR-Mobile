@@ -123,6 +123,25 @@ export const ReverseAttendanceChangeRequestReasonChoices = (id) => {
 
   return reason;
 }
+export const shortAttendanceChangeRequestReasonChoices = (id) => {
+  let reason;
+
+  switch (id) {
+    case '0':
+      reason = 'FP';
+      break;
+    case 2:
+      reason = 'OW';
+      break;
+    case 3:
+      reason = 'OT';
+      break;
+    default:
+    // Handle default case if needed
+  }
+
+  return reason;
+}
 export const getAttendanceStatusById = (id) => {
 
   let status;

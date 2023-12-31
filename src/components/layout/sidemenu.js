@@ -134,21 +134,26 @@ const SideMenuContent = ({ navigation, setMenuOpen, setIsClosing }) => {
         <View style={{ flex: 1, paddingTop: 10 }}>
             <View style={{ flexDirection: 'row', flex: 1 }}>
                 {/* First View (20px width) */}
-                <View style={{ width: 40, flexDirection: 'column', justifyContent: 'space-between', marginTop: '20%', marginBottom: '20%', marginLeft: 10 }}>
+                <View style={{ width: 40, flexDirection: 'column', justifyContent: 'space-between', marginTop: '13%', marginBottom: '20%', marginLeft: 10 }}>
 
                     <View style={{}}>
-                        <View style={{ width: 40, height: 40, borderRadius: 30, backgroundColor: 'lightgrey', justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
-                            <Image style={{width:30, height : 30, objectFit : 'cover'}} source={Avatar} />
-                            <Text style={{ fontSize: 8, fontWeight: '300', fontFamily: 'Poppins-SemiBold' }}>{userName?.name.substring(0, 2).toUpperCase()}</Text>
+                        <View style={{ width: 40, height: 40, borderRadius: 30, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', marginBottom:4 }}>
+                            <Image style={{ width: 30, height: 30, objectFit: 'cover' }} source={Avatar} />
                         </View>
-                        {companyDetail.map((item, index) => (
-                            <TouchableOpacity onPress={() => {
-                                setSelectedProject(item.id);
-                                setMenuOpen(false)
-                            }} key={index} style={{ width: 40, height: 40, borderRadius: 30, backgroundColor: 'lightgrey', justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
-                                <Text style={{ color: 'white' }}>{item?.name.substring(0, 2)}</Text>
-                            </TouchableOpacity>
-                        ))}
+                         <Text style={{ fontSize: 10, fontWeight: '300', fontFamily: 'Poppins-Medium', textAlign : 'center' }}>{userName?.first_name.substring(0, 1)}.{userName?.last_name.substring(0, 4)}</Text> 
+                         <View style={{width : 40, height : 0.3, backgroundColor : 'grey',position:'absolute', top:'37%'}}/>
+
+                        <View style={{ marginTop: '50%' }}>
+                            {companyDetail.map((item, index) => (
+                                <TouchableOpacity onPress={() => {
+                                    setSelectedProject(item.id);
+                                    setMenuOpen(false)
+                                }} key={index} style={{ width: 40, height: 40, borderRadius: 30, backgroundColor: selectedProject == item.id ? 'white' : 'lightgrey', justifyContent: 'center', alignItems: 'center', marginBottom: 10 , borderWidth : selectedProject == item.id ? 1 : 0}}>
+                                    <Text style={{ color:selectedProject == item.id ? 'black' : 'white' }}>{item?.name.substring(0, 2)}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+
                     </View>
 
 

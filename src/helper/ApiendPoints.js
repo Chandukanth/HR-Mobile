@@ -12,7 +12,7 @@ export const endpoints = () => ({
     CompanyApi: appApi("company/"),
     ColorApi: appApi("color/"),
     BranchApi: appApi("branch/"),
-    LoggedInUserApi: appApi("me"),
+    LoggedInUserApi: appApi("company_user"),
     UserApi: appApi("user"),
     CompanyDepartmentApi: appApi("company_department/"),
     CompanyDesignationApi: appApi("company_designation/"),
@@ -26,6 +26,7 @@ export const endpoints = () => ({
     HrLeaveTypeApi: appApi("hr_leave_type/"),
     HrLeaveRequestApi: appApi("hr_leave_request/"),
     HrCheckInApi: appApi("hr_check_in/"),
-    payrollReimbursementCategory: appApi("payroll_reimbursement_category/")
+    payrollReimbursementCategory: appApi("payroll_reimbursement_category/"),
+    HrTeamAPi : appApi("hr_team/")
 
 });

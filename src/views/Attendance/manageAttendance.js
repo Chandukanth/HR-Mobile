@@ -20,7 +20,7 @@ import AttendnaceChangeRequestService from "../../Services/AttendanceChangeReque
 import AttendanceService from "../../Services/AttendanceService";
 import { useRecoilState } from "recoil";
 import { User, activeTab, company } from "../../lib/atom";
-import { AttendanceChangeRequestReasonChoices, ReverseAttendanceChangeRequestReasonChoices, attendanceId, generateAttendanceElement } from "../../lib/AttendanceElements";
+import { AttendanceChangeRequestReasonChoices, ReverseAttendanceChangeRequestReasonChoices, attendanceId, generateAttendanceElement, shortAttendanceChangeRequestReasonChoices } from "../../lib/AttendanceElements";
 import { formatDate, getCurrentMonthEndDate, getCurrentMonthStartDate, getMonthNumber } from "../../lib/Datetime";
 import RejectedButton from "../../components/buttons/RejectedButton";
 import PendingButton from "../../components/buttons/PendingButton";
@@ -44,9 +44,11 @@ const FirstRoute = () => {
     const [index, setIndex] = useRecoilState(activeTab);
     const [year, setYear] = useState("")
     const [month, setMonth] = useState("")
+    const [attendanceDetail, setAttendanceDetails] = useState([])
 
     useEffect(() => {
         getAttendanceList()
+        getAttendanceChangeRequest()
     }, [year])
 
     const handlePress = (i) => {
@@ -73,8 +75,16 @@ const FirstRoute = () => {
 
         }
         let response = await AttendnaceChangeRequestService.post(data)
-        console.log("🚀 ~ file: manageAttendance.js:67 ~ SubmitRequest ~ data:", response)
         setIndex(1)
+    }
+
+    const getAttendanceChangeRequest = async () => {
+        let params = {
+            employee: selecteduser?.id,
+            // from_date : fromDate,
+        }
+        let response = await AttendnaceChangeRequestService.get(params)
+        setAttendanceDetails(response.data)
     }
 
     const getAttendanceList = async () => {
@@ -163,7 +173,7 @@ const FirstRoute = () => {
             </View>
             <ScrollView>
                 <View>
-                    {renderNumberList(toggleChangeModal, handlePress, selectStatus, selectedItem, selectedReason, selectedReasonItem, attendanceList)}
+                    {renderNumberList(toggleChangeModal, handlePress, selectStatus, selectedItem, selectedReason, selectedReasonItem, attendanceList, attendanceDetail)}
                 </View>
             </ScrollView>
             <View style={{ position: 'absolute', bottom: 10, width: '100%' }}>
@@ -409,7 +419,7 @@ const SecondRoute = () => {
     );
 }
 
-const renderNumberList = (toggleChangeModal, handlePress, selectStatus, selectedItem, selectedReason, selectedReasonItem, attendanceList) => {
+const renderNumberList = (toggleChangeModal, handlePress, selectStatus, selectedItem, selectedReason, selectedReasonItem, attendanceList, attendanceDetail) => {
 
     const numberList = [];
     for (let i = 1; i <= 31; i++) {
@@ -418,7 +428,9 @@ const renderNumberList = (toggleChangeModal, handlePress, selectStatus, selected
 
         // Find attendance data for the current day
         const dayAttendance = attendanceList.find(item => item.date === `2023-12-${formattedNumber}`);
+        const attendnaceRequest = attendanceDetail.find(item => item.from_date === `2023-12-${formattedNumber}`)
 
+        console.log("🚀 ~ file: manageAttendance.js:433 ~ renderNumberList ~ attendnaceRequest:", attendnaceRequest)
         numberList.push(
             <View key={i} style={{ width: '100%', backgroundColor, height: 60, }}>
                 <View
@@ -434,7 +446,7 @@ const renderNumberList = (toggleChangeModal, handlePress, selectStatus, selected
                     <Text style={{ opacity: 0.7, paddingLeft: 40 }}>{formattedNumber}</Text>
                     {dayAttendance ? (
                         // Display content based on attendance data
-                        <Image style={{ width: 20, height: 20, justifyContent: 'center', alignItems: 'center' }} source={generateAttendanceElement(dayAttendance?.computed_status)} />
+                        <Image style={{ width: 20, height: 20, justifyContent: 'center', alignItems: 'center' }} source={generateAttendanceElement(dayAttendance?.computed_status == 0 ? dayAttendance?.computed_status.toString() : dayAttendance?.computed_status)} />
                     ) : (
                         // Default content when no attendance data is found
                         <Image style={{ width: 20, height: 20, justifyContent: 'center', alignItems: 'center' }} source={require('../../../assets/days/notassigned.png')} />
@@ -443,7 +455,12 @@ const renderNumberList = (toggleChangeModal, handlePress, selectStatus, selected
                         {selectStatus && selectedItem.changeto == i ? (
                             <Image style={{ width: 20, height: 20, justifyContent: 'center', alignItems: 'center' }} source={selectStatus.image} />
                         ) : (
-                            <MaterialCommunityIcons name="chevron-down" size={24} color="black" />
+                            <>
+                                {attendnaceRequest ?
+                                    <Image style={{ width: 20, height: 20, justifyContent: 'center', alignItems: 'center' }} source={generateAttendanceElement(attendnaceRequest?.to_status == 0 ? attendnaceRequest?.to_status.toString() : attendnaceRequest?.to_status)} />
+                                    : <MaterialCommunityIcons name="chevron-down" size={24} color="black" />
+                                }
+                            </>
 
                         )}
                     </TouchableOpacity>
@@ -451,7 +468,13 @@ const renderNumberList = (toggleChangeModal, handlePress, selectStatus, selected
                         {selectedReason && selectedReasonItem == i ? (
                             <Text style={{ fontFamily: 'Poppins-SemiBold' }}>{selectedReason == 'Out for Work' ? 'OW' : selectedReason == 'Forgot to Punch' ? 'FP' : 'OT'}</Text>
                         ) : (
-                            <MaterialCommunityIcons name="chevron-down" size={24} color="black" />
+                            <>
+                                {attendnaceRequest ?
+                                    <Text style={{ fontFamily: 'Poppins-SemiBold' }}>{shortAttendanceChangeRequestReasonChoices(attendnaceRequest.reason == 0 ? attendnaceRequest.reason.toString() : attendnaceRequest.reason)}</Text>
+                                    : <MaterialCommunityIcons name="chevron-down" size={24} color="black" />
+                                }
+                            </>
+                            // <MaterialCommunityIcons name="chevron-down" size={24} color="black" />
                         )}
 
                     </TouchableOpacity>

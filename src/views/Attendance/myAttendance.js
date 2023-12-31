@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout";
-import { Text, View, FlatList, ScrollView, TouchableOpacity } from "react-native";
+import { Text, View, FlatList, ScrollView, TouchableOpacity, Alert, Modal, StyleSheet } from "react-native";
 import Calender from "../../components/Calender";
 import { Button } from "react-native";
 import BlackButton from "../../components/blackButton";
@@ -11,8 +11,9 @@ import { useRecoilState } from "recoil";
 import { User, projectId } from "../../lib/atom";
 import CheckInService from "../../Services/CheckinService";
 import { formatDate, getTime } from "../../lib/Datetime";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
+import { useIsFocused } from "@react-navigation/native";
 
 const MyAttendance = () => {
     const [attendanceData, setAttendanceData] = useState([])
@@ -21,21 +22,22 @@ const MyAttendance = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [checkin, setCheckin] = useState([])
     const [checkedIn, setCheckedIn] = useState(false)
-
+    const [isModalVisible, setModalVisible] = useState(false);
+    const isFocused = useIsFocused()
 
     useEffect(() => {
         getDetails()
-    }, [])
+    }, [isFocused])
     const getDetails = async () => {
         setIsLoading(true)
         const user = await LoggedInUserService.get()
         let checkinParams = {
-            employee: user.id,
+            employee: user[0].id,
             timestamp__date: formatDate(new Date())
         }
-        setLoggedInUser(user)
+        setLoggedInUser(user[0])
         let myAttendanceParams = {
-            employee: user.id,
+            employee: user[0].id,
         }
         const response = await AttendanceService.get(myAttendanceParams);
         setAttendanceData(response?.data)
@@ -45,21 +47,29 @@ const MyAttendance = () => {
 
     }
 
-    const checkIn = async () => {
-        let status
-        if (checkin.length > 0) {
-            status = 1
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
+
+
+    const checkingIn = (status) => {
+        if (status == 0) {
+            checkIn(status)
         } else {
-            status = '0'
+            toggleModal()
         }
+    }
+
+    const checkIn = async (status) => {
+
+
         let data = {
             company: selectedProject ? selectedProject : 1,
             employee: loggedInUser?.id,
             status: status
         }
         const response = await CheckInService.post(data)
-        console.log("🚀 ~ file: myAttendance.js:54 ~ checkIn ~ response:", response)
-        setCheckedIn(!checkedIn)
+        setModalVisible(false)
         if (response) {
             getDetails()
         }
@@ -78,16 +88,54 @@ const MyAttendance = () => {
                     </Text>
                 </View>
             </View>
-            {checkin[1]?.status !== 1 ? (
-                <BlackButton onPress={checkIn} title={checkin.length > 0 ? 'Check out' : 'Check in'} />
+            {checkin.length == 0 || checkin.length == 1 ? (
+                <BlackButton onPress={() => checkingIn(checkin.length > 0 ? 1 : 0)} title={checkin.length > 0 ? 'Check out' : 'Check in'} />
             ) : (
-                <View style={{ width: '100%', borderColor: 'lightgrey', borderWidth: 1, borderRadius: 8, alignItems: 'center', height: 40, justifyContent: 'center' }}>
+                <>
+                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                        <TouchableOpacity disabled={true} style={{ width: '95%', height: 55, backgroundColor: 'white', borderRadius: 8, justifyContent: 'center', alignItems: 'center', marginTop: 12, borderWidth: 1, borderColor: 'lightgrey', flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                            <Text style={{ fontSize: 12, fontFamily: 'Poppins-Light' }}>
+                                Checked out <Text style={{ fontFamily: 'Poppins-SemiBold' }}>-{checkin.length > 0 ? getTime(checkin[0].timestamp) : null}</Text>
+                            </Text>
+                            <View style={{ width: 0.5, height: 40, backgroundColor: 'grey' }} />
+                            <Text style={{ fontSize: 12, fontFamily: 'Poppins-Light' }}>
+                                Hours <Text style={{ fontFamily: 'Poppins-SemiBold' }}>- 00</Text>
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </>
 
-                    <Text style={{ fontSize: 12, fontFamily: 'Poppins-Light' }}>
-                        Checked out <Text style={{ fontFamily: 'Poppins-SemiBold' }}>-{checkin.length > 0 ? getTime(checkin[0].timestamp) : null}</Text>
-                    </Text>
-                </View>
             )}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isModalVisible}
+                onRequestClose={() => {
+                    toggleModal();
+                }}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <View style={{ minHeight: 150, justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
+
+                            <Text style={{ textAlign: 'center', lineHeight: 24, fontFamily: 'Poppins-Regular' }} >If you checkout you can't check in again until your next shift starts.  {'\n'} {'\n'}Are you sure you want to check out?</Text>
+
+                        </View>
+                        <View style={{ width: '100%', flexDirection: 'row', alignItems: 'flex-end', marginLeft: 20, marginBottom: 10 }}>
+                            <TouchableOpacity onPress={() => checkIn(1)} style={{ height: 40, width: '40%', backgroundColor: 'black', borderRadius: 8, justifyContent: 'center', alignItems: 'center', marginTop: 12 }}>
+                                <Text style={{ color: 'white', fontFamily: 'Poppins-Medium', fontSize: 15 }}>{'Ok'}</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={toggleModal} style={{ height: 40, width: '40%', backgroundColor: 'white', borderRadius: 8, justifyContent: 'center', alignItems: 'center', marginTop: 12, borderWidth: 1, marginLeft: 10 }}>
+                                <Text style={{ color: 'black', fontFamily: 'Poppins-Medium', fontSize: 15 }}>{'Cancel'}</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                    </View>
+
+
+
+                </View>
+            </Modal>
         </View>
 
 
@@ -102,3 +150,25 @@ const MyAttendance = () => {
 };
 
 export default MyAttendance;
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        width: '100%'
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        minHeight: 200,
+        width: '75%',
+        borderRadius: 10,
+        elevation: 5,
+
+    },
+});

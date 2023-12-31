@@ -25,6 +25,7 @@ import Login from './src/views/Auth/login';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AsyncStorageObject from './src/lib/AsyncStorage';
 import AsyncStorage from './src/helper/AsyncStorage';
+import ChangeShiftDetails from './src/views/Shift/ChangeShiftDetail';
 const loadFonts = async () => {
   await Font.loadAsync({
     'Poppins-Bold': require("./assets/fonts/Poppins-Bold.ttf"),
@@ -41,20 +42,17 @@ const loadFonts = async () => {
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-  const [accessTokenExist, setAccessTokenExist] = React.useState(false)
+  
   StatusBar.setBackgroundColor("#fff")
   StatusBar.setBarStyle("dark-content")
   const [isFontLoaded, setFontLoaded] = React.useState(false);
+ 
   React.useEffect(() => {
     (async () => {
-      const sessionToken = await AsyncStorageObject.getItem(AsyncStorage.ACCESS_TOKEN)
-      if (sessionToken) {
-        setAccessTokenExist(true)
-      } else {
-        setAccessTokenExist(false)
-      }
+        await AsyncStorageObject.clearAll()
+       
     })();
-  }, []);
+}, []);
 
   React.useEffect(() => {
     loadFonts()
@@ -77,7 +75,7 @@ const App = () => {
               screenOptions={{
                 headerShown: false,
               }}
-              initialRouteName={accessTokenExist ? 'MyAttendance' : "Login"}
+              initialRouteName={"Login"}
             >
 
               {/* Login */}
@@ -98,7 +96,7 @@ const App = () => {
               <Stack.Screen name="MyShifts" component={MyShifts} />
               <Stack.Screen name="ShiftApplications" component={ShiftApplications} />
               <Stack.Screen name="ChangeShift" component={ChangeShift} />
-
+              <Stack.Screen name="ChangeShiftForm" component={ChangeShiftDetails} />
 
               <Stack.Screen name="MyClaims" component={MyClaims} />
               <Stack.Screen name="Applications" component={Applications} />

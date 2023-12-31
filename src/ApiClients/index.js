@@ -15,6 +15,32 @@ const axiosClient = axios.create({
   },
 });
 
+axiosClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const { config, response } = error;
+    const originalRequest = config;
+
+    if (response.status === 403 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        let sessionToken = await apiClient.getSessionToken();
+        axiosClient.defaults.headers.common["Authorization"] = `Bearer ${sessionToken}`;
+
+        return axiosClient(originalRequest);
+      } catch (refreshError) {
+        console.error("Error refreshing token:", refreshError);
+        // Handle refresh token error as needed, e.g., redirect to login
+        navigate('Login'); 
+        return Promise.reject(refreshError);
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
 class apiClient {
   static async getSessionToken() {
     try {
@@ -40,7 +66,9 @@ class apiClient {
 
   static async post(url, body) {
     try {
-      let sessionToken = await this.getSessionToken();
+      let sessionToken = await AsyncStorage.getItem(
+        AsyncStorageConstants.ACCESS_TOKEN
+      );
       axiosClient.defaults.headers.common["Authorization"] = `Bearer ${sessionToken}`;
 
       const response = await axiosClient.post(url, body);
@@ -54,7 +82,9 @@ class apiClient {
 
   static async get(url) {
     try {
-      let sessionToken = await this.getSessionToken();
+      let sessionToken = await AsyncStorage.getItem(
+        AsyncStorageConstants.ACCESS_TOKEN
+      );
 
       axiosClient.defaults.headers.common["Authorization"] = `Bearer ${sessionToken}`;
 
@@ -68,7 +98,9 @@ class apiClient {
 
   static async patch(url, body) {
     try {
-      let sessionToken = await this.getSessionToken();
+      let sessionToken = await AsyncStorage.getItem(
+        AsyncStorageConstants.ACCESS_TOKEN
+      );
       axiosClient.defaults.headers.common["Authorization"] = `Bearer ${sessionToken}`;
 
       const response = await axiosClient.patch(url, body);
@@ -82,7 +114,9 @@ class apiClient {
 
   static async put(url, body) {
     try {
-      let sessionToken = await this.getSessionToken();
+      let sessionToken = await AsyncStorage.getItem(
+        AsyncStorageConstants.ACCESS_TOKEN
+      );
       axiosClient.defaults.headers.common["Authorization"] = `Bearer ${sessionToken}`;
 
       const response = await axiosClient.put(url, body);
@@ -96,7 +130,9 @@ class apiClient {
 
   static async delete(url) {
     try {
-      let sessionToken = await this.getSessionToken();
+      let sessionToken = await AsyncStorage.getItem(
+        AsyncStorageConstants.ACCESS_TOKEN
+      );
       axiosClient.defaults.headers.common["Authorization"] = `Bearer ${sessionToken}`;
 
       const response = await axiosClient.delete(url);

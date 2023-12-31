@@ -11,14 +11,19 @@ import ApprovedButton from "../../components/buttons/ApprovedButton";
 import ShiftChangeRequestService from "../../Services/ShiftChangeRequestService";
 import { useRecoilState } from "recoil";
 import { User } from "../../lib/atom";
+import { useIsFocused } from "@react-navigation/native";
+import PendingButton from "../../components/buttons/PendingButton";
+import RejectedButton from "../../components/buttons/RejectedButton";
+import ChatButton from "../../components/buttons/ChatButton";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-const ChangeShift = () => {
+const ChangeShift = ({ navigation }) => {
     const [isDrawerVisible, setDrawerVisible] = useState(false);
     const [isChating, setIsChating] = useState(false)
     const [currentUser, setCurrentUser] = useRecoilState(User)
     const [shiftData, setShiftData] = useState([])
+    const isFocused = useIsFocused()
     const toggleDrawer = () => {
         setDrawerVisible(!isDrawerVisible);
     };
@@ -40,13 +45,12 @@ const ChangeShift = () => {
 
     useEffect(() => {
         getShiftApplications()
-    }, [])
+    }, [isFocused])
 
     const getShiftApplications = async () => {
         let params = {
             employee: currentUser?.id,
-            from_date__gte : '2023-01-01',
-            to_date__lte : '2023-01-01'
+
         }
         let response = await ShiftChangeRequestService.get(params)
         setShiftData(response.data)
@@ -125,7 +129,7 @@ const ChangeShift = () => {
                             <View style={{ backgroundColor: '#f7f7f7' }}>
 
                                 <View style={{ alignItems: 'center', paddingTop: 20 }}>
-                                    {shiftData && shiftData.length > 0 && shiftData.map((item, index) => (
+                                    {shiftData && shiftData.length > 0 ? shiftData.map((item, index) => (
                                         <View key={index} style={styles.card}>
                                             <View style={{ marginTop: 6 }}>
                                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 10, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
@@ -151,12 +155,26 @@ const ChangeShift = () => {
                                                 <View style={{ borderWidth: 1, borderColor: 'lightgrey', height: 50, borderRadius: 6, width: '90%', marginLeft: 20, marginTop: 20, justifyContent: 'center', alignItems: 'flex-start' }}>
                                                     <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14, marginLeft: 10 }}>{item?.reason}</Text>
                                                 </View>
-                                                <StatusChat setIsChating={setIsChating} />
+                                                <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center' }}>
+                                                    {item.status == 0 && (
+                                                        <PendingButton />
+                                                    )}
+
+                                                    {item.status == 1 && (
+                                                        <ApprovedButton />
+
+                                                    )}
+                                                    {item.status == 2 && (
+                                                        <RejectedButton />
+
+                                                    )}
+                                                    <ChatButton onPress={() => setIsChating(true)} />
+                                                </View>
                                             </View>
 
 
                                         </View>
-                                    ))}
+                                    )) : <Text>No record found</Text>}
 
                                 </View>
                             </View>
@@ -166,7 +184,7 @@ const ChangeShift = () => {
                     </View>
                     <View style={{ flex: 0.13, backgroundColor: '#f7f7f7' }}>
                         <View style={{ position: 'absolute', bottom: 18, width: '95%', justifyContent: 'center', left: 5 }}>
-                            <BlackButton title={'Change Shift'} />
+                            <BlackButton onPress={() => navigation.navigate('ChangeShiftForm')} title={'Change Shift'} />
                         </View>
                     </View>
                 </>

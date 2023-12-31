@@ -20,7 +20,7 @@ class LeaveRequestService {
     static async patch(id, data) {
         try {
 
-            const response = apiClient.patch(`${endpoints().HrLeaveRequestApi}${id}`, data)
+            const response = apiClient.patch(`${endpoints().HrLeaveRequestApi}${id}/`, data)
             return (await response).data;
         } catch (error) {
             console.log(error?.response);

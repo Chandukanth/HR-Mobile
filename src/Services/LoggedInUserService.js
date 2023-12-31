@@ -8,7 +8,7 @@ class LoggedInUserService {
     static async get() {
         try {
 
-            const response = apiClient.get(`https://auth-7372.qelza.com/me`)
+            const response = apiClient.get(`https://api-7372.qelza.com/company_user/me`)
             return (await response).data;
 
         } catch (err) {

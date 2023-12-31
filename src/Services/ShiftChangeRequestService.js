@@ -16,6 +16,25 @@ class ShiftChangeRequestService {
             console.log(err);
         }
     }
+    static async patch(id, data) {
+        try {
+
+            const response = apiClient.patch(`${endpoints().HrShiftChangeRequestApi}${id}/`, data)
+            return (await response).data;
+        } catch (error) {
+            console.log(error?.response);
+        }
+    }
+
+    static async post(data) {
+        try {
+            const response = apiClient.post(`${endpoints().HrShiftChangeRequestApi}`, data)
+            return (await response).data;
+
+        } catch (error) {
+            console.log(error.response);
+        }
+    }
 }
 
 export default ShiftChangeRequestService;

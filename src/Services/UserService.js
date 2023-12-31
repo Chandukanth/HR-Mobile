@@ -1,14 +1,15 @@
 import { endpoints } from "../helper/ApiendPoints";
 import apiClient from "../ApiClients";
+import Url from "../lib/Url";
 
 
 class UserService {
 
 
-    static async get() {
+    static async get(params) {
         try {
-
-            const response = apiClient.get(`https://auth-7372.qelza.com/user`)
+            let apiUrl = Url.get(`${endpoints().HrTeamAPi}`, params)
+            const response = apiClient.get(apiUrl)
             return (await response).data;
 
         } catch (err) {

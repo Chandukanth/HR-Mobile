@@ -2,17 +2,15 @@ import { Foundation, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { BackHandler, Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Chat from "../../../assets/new.png";
-import BottomSheet from "../../components/BottomSheet";
-import ApproveButton from "../../components/buttons/ApproveButton";
-import RejectButton from "../../components/buttons/RejectButton";
-import Layout from "../../components/layout";
+import LeaveRequestService from "../../Services/LeaveRequestService";
 import DateFilter from "../../components/DateFilter";
 import ChattingScreen from "../../components/Ui/chattingScreen";
-import { screenHeight } from "../../lib/heightwidth";
-import LeaveRequestService from "../../Services/LeaveRequestService";
-import { formatDate } from "../../lib/Datetime";
+import ApproveButton from "../../components/buttons/ApproveButton";
 import ApprovedButton from "../../components/buttons/ApprovedButton";
+import RejectButton from "../../components/buttons/RejectButton";
 import RejectedButton from "../../components/buttons/RejectedButton";
+import Layout from "../../components/layout";
+import { formatDate } from "../../lib/Datetime";
 
 const LeaveRequest = () => {
     const [isDrawerVisible, setDrawerVisible] = useState(false);
@@ -118,6 +116,7 @@ const LeaveRequest = () => {
             status: item,
         }
         let response = await LeaveRequestService.patch(id, data)
+        getLeaveRequest()
         console.log("🚀 ~ file: leaveRequests.js:119 ~ submisstLeave ~ ressponse:", response)
 
     }
@@ -145,7 +144,7 @@ const LeaveRequest = () => {
                                     <View style={{ width: '97%', marginLeft: 4, marginRight: 25 }}>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 20, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
                                             <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Employee</Text>
-                                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Ashutosh Bhardwaj</Text>
+                                            <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>{item?.employee.username}</Text>
                                         </View>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, paddingTop: 20, height: 50, borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}>
                                             <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 14 }}>Applied</Text>
